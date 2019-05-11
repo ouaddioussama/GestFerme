@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+</h:head>
+<h:body styleClass="Body" style="background-color: #88b6d8;">
+	<h:form>
+
+		<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+		<div align="center">
+			<h3>
+				<span style="color: blue; size: 9" class="shadow">
+					<h1>Application gestion de la Ferme </h1>
+				</span>
+			</h3>
+		</div>
+		<div align="center">
+			<p:panel style="width:50%;height:40%px;margin-top:38px;"
+				header="Login">
+
+				<h:panelGrid columns="3" cellpadding="5"
+					style="margin-top:100px;margin-left:50px;color:blue;">
+
+					<h:outputLabel value="Nom" style="margin-left:00px;" />
+					<h:outputLabel value=":" />
+
+					<p:inputText id="nom" style="width:100%"
+						value="#{loginService.employeetoLog.nom}" required="true" label="nom" />
+
+					<h:outputLabel value="mot de passe" />
+					<h:outputLabel value=":" />
+
+					<p:password id="password" style="width:100%"
+						value="#{loginService.employeetoLog.pass_word}" required="true"
+						label="password" />
+
+
+					<f:facet name="footer">
+						<p:commandButton value="Login" style="margin-left:35%;width:70%"
+							update="@form" 
+							actionListener="#{loginService.login}" />
+					</f:facet>
+
+					<br></br>
+
+
+
+				</h:panelGrid>
+			</p:panel>
+		</div>
+	</h:form>
+
+
+
+
+
+</h:body>
+</html>
+

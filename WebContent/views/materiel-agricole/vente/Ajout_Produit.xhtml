@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet name="style.css" library="css" />
+</h:head>
+<h:body styleClass="Body">
+
+	<h:form id="prod">
+
+		<p:panel header="Ajout Information Produit / إضافة معلومات منتوجات  المواشي " styleClass="text_normal"
+		id="prod"
+			style="width:100%">
+			<h:panelGrid columns="4" id="panelProd"
+				style="color:blue;width:100%" cellpadding="4">
+
+
+				<h:outputLabel value="libelle Produit" styleClass="text_normal" />
+				<p:inputText style="width:80%"
+					value="#{produitService.objectToInsert.designation_prod}" />
+
+				<h:outputLabel value="إسم  المنتوج" styleClass="text_normal" />
+
+
+
+
+			</h:panelGrid>
+		</p:panel>
+		<br></br>
+
+		<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
+			actionListener="#{produitService.createProdAgricoleVente}" 
+			update="growl1
+			  frmContent:index:addPanel  frmContent:index:listOperation
+			  frmContent:index:mdProd	 frmContent:index:prod:panelProd
+			 " />
+
+
+
+	</h:form>
+</h:body>
+</html>

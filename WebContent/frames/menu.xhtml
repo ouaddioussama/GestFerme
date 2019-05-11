@@ -1,0 +1,194 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+
+
+	<h:form>
+
+
+
+		<p:accordionPanel>
+
+			<p:tab title="Actualiser">
+
+
+				<p:commandLink update=":frmContent"
+					action="#{HelpBean.goTo('/views/index')}">
+
+					<h:outputText style="color:blue;width:100%" value="refresh" />
+
+				</p:commandLink>
+			</p:tab>
+			<p:tab title="Société">
+
+
+				<p:commandLink update=":frmContent"
+					action="#{HelpBean.goTo('/views/societe/index')}">
+
+					<h:outputText style="color:blue;width:100%" value="refresh" />
+
+				</p:commandLink>
+			</p:tab>
+			<p:tab title="Contacts">
+
+
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/client/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Client" />
+
+				</p:commandLink>
+				<hr />
+
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/fournisseur/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Fournisseur" />
+
+				</p:commandLink>
+				<hr />
+
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/fournisseur/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Employee" />
+
+				</p:commandLink>
+			</p:tab>
+		</p:accordionPanel>
+
+		<p:accordionPanel>
+			<p:tab title="Produit">
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/famille_produit/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Famille Produit" />
+				</p:commandLink>
+
+
+				<hr />
+
+
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/produit/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Produit" />
+				</p:commandLink>
+
+
+			</p:tab>
+		</p:accordionPanel>
+
+		<p:accordionPanel>
+			<p:tab title="Stock/achat">
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/achat/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Achat" />
+				</p:commandLink>
+
+
+				<hr />
+
+
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/depot/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="depot" />
+				</p:commandLink>
+
+
+				<hr />
+
+
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/fournisseur/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Stock" />
+				</p:commandLink>
+
+				<hr />
+
+
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/depot/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Inventaire" />
+				</p:commandLink>
+
+				<hr />
+
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/Historique/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Historique" />
+				</p:commandLink>
+
+
+
+
+
+			</p:tab>
+		</p:accordionPanel>
+
+
+		<p:accordionPanel>
+			<p:tab title="Facturation/Documents">
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/devis/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Devis" />
+				</p:commandLink>
+
+				<hr />
+
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/commande/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Commande" />
+				</p:commandLink>
+
+				<hr />
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/facture/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Facture" />
+				</p:commandLink>
+
+				<hr />
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/livraison/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Livraison" />
+				</p:commandLink>
+
+
+				<hr />
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/reglement/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Reglement" />
+				</p:commandLink>
+
+			</p:tab>
+
+
+		</p:accordionPanel>
+
+
+		<p:accordionPanel>
+			<p:tab title="Tableau de bord">
+				<p:commandLink update=":frmContent"
+					actionListener="#{HelpBean.go('/views/tableau_bord/index.xhtml')}">
+
+					<h:outputText style="color:blue;width:100%" value="Tableau de bord" />
+				</p:commandLink>
+
+			</p:tab>
+		</p:accordionPanel>
+	</h:form>
+</h:body>
+</html>

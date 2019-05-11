@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+
+</h:head>
+
+<h:body>
+	<h:form id="list">
+
+		<p:growl id="growl" life="1000" showDetail="true" />
+
+		<p:panel header="Listes Achat Prod ">
+			<p:separator></p:separator>
+
+			<p:dataTable value="#{achatService.listAchatAgricole}" var="t" rows="10"
+				rowKey="#{rowIndex}" rowIndexVar="rowIndex" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,100,200">
+
+
+
+				<p:column headerText="numero" style="text-align: left;width: ">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+
+				<p:column headerText="ref_bon_achat" style="text-align: left; "
+					filterBy="#{t.ref_bon_achat}">
+					<h:outputText value="#{t.ref_bon_achat}" />
+
+				</p:column>
+				<p:column headerText="quantite" style="text-align: left; "
+					filterBy="#{t.quantite}">
+					<h:outputText value="#{t.quantite}" />
+
+				</p:column>
+
+		
+
+			</p:dataTable>
+		</p:panel>
+		<p:separator></p:separator>
+
+
+	</h:form>
+
+</h:body>
+</html>
+

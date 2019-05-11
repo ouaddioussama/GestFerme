@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+
+	<h:outputStylesheet name="style.css" library="css" />
+	<h:outputScript library="primefaces" name="jquery/jquery.js" />
+
+</h:head>
+
+
+<h:body styleClass="Body">
+
+
+	<p:panel
+		header="Ajout Salaire employée /إضافة معلومات الأجرة "
+		styleClass="text_normal" style="width:100%">
+		<h:panelGrid columns="3" id="addPanel" style="color:blue;width:100%"
+			cellpadding="4">
+
+
+			<h:outputLabel value="l'employée" />
+			<p:selectOneMenu filter="true" style="width:60%"
+				value="#{ficheSalaireService.objectToInsert.employee}"
+				converter="#{employeeConverter}">
+				<f:selectItems value="#{employeeService.listObjects}" var="d"
+					itemValue="#{d}" itemLabel="#{d.nom}" />
+			</p:selectOneMenu>
+			<h:outputLabel value="المسؤول عن الشراء" />
+
+
+			<p:outputLabel value="Date de debut periode" />
+			<p:calendar showOn="button" pattern="dd/MM/yyyy"
+				value="#{ficheSalaireService.objectToInsert.date_debut}" />
+			<p:outputLabel value="تاريخ بداية الفترة" />
+
+
+			<p:outputLabel value="Date de Fin periode" />
+			<p:calendar showOn="button" pattern="dd/MM/yyyy"
+				value="#{ficheSalaireService.objectToInsert.date_fin}" />
+			<p:outputLabel value="تاريخ نهاية الفترة" />
+
+
+
+			<h:outputLabel value="Montant_Salaire" />
+			<p:inputText style="width:80%" id="montant_k"
+				value="#{ficheSalaireService.objectToInsert.salaire}">
+				<f:convertNumber maxFractionDigits="2" />
+			</p:inputText>
+			<h:outputLabel value="المبلغ الإجمالي" />
+
+
+
+			<p:outputLabel value="Date de paiement" />
+			<p:calendar showOn="button" pattern="dd/MM/yyyy"
+				value="#{ficheSalaireService.objectToInsert.date_paiement}" />
+			<p:outputLabel value="تاريخ الدفع" />
+
+
+
+
+		</h:panelGrid>
+	</p:panel>
+	<br></br>
+
+	<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
+		update="growl1 frmContent:index:addPanel frmContent:index:listOperation:tabSalaire"
+		action="#{ficheSalaireService.create}" />
+
+
+</h:body>
+</html>

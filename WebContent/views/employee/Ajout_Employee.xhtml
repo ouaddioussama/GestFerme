@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet name="style.css" library="css" />
+</h:head>
+<h:body styleClass="Body">
+
+	<h:form>
+
+		<p:panel header="Ajout Information Employee " styleClass="text_normal"
+			style="width:100%">
+			<h:panelGrid columns="3" id="panelmodel"
+				style="color:blue;width:100%" cellpadding="4">
+
+
+				<h:outputLabel value="nom" styleClass="text_normal" />
+				<p:inputText style="width:80%"
+					value="#{employeeService.objectToInsert.nom}" />
+
+				<h:outputLabel value="الإسم" styleClass="text_normal" />
+
+
+
+				<h:outputLabel value="Profil" styleClass="text_normal" />
+				<p:selectOneMenu filter="true" style="width:60%"
+					value="#{employeeService.objectToInsert.profil}">
+					<f:selectItems value="#{employeeService.listProfils}" var="cc"
+						itemValue="#{cc}" itemLabel="#{cc}" />
+				</p:selectOneMenu>
+				<h:outputLabel value="وظيفة" styleClass="text_normal" />
+
+
+				<h:outputLabel value="email" styleClass="text_normal" />
+				<p:inputText style="width:80%"
+					value="#{employeeService.objectToInsert.email}" />
+
+				<h:outputLabel value="البريد الإلكتروني" styleClass="text_normal" />
+
+
+				<h:outputLabel value="mot_de_passe" styleClass="text_normal" />
+				<p:password value="#{employeeService.objectToInsert.pass_word}"
+					style="width:80%" />
+
+				<h:outputLabel value="الرقم السري " styleClass="text_normal" />
+
+
+
+
+
+			</h:panelGrid>
+		</p:panel>
+		<br></br>
+
+		<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
+			actionListener="#{employeeService.create}" update="growl1 frmContent" />
+
+
+
+	</h:form>
+</h:body>
+</html>

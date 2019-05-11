@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+</h:head>
+
+<h:body>
+	<h:form id="mdProd" style="width:100%">
+
+
+		<p:panel
+			header="Listes des Produits /قائمة المنتوجات الخاصة بالمواد الفلاحية ">
+			<p:separator></p:separator>
+
+			<p:dataTable value="#{produitService.listProduitAgricoleAchat}" var="t"
+				rowKey="#{t.id}" rowIndexVar="rowIndex" rows="10" editable="true"
+				rowsPerPageTemplate="5,10,15">
+
+				<p:ajax event="rowEdit" listener="#{produitService.onRowEdit}"
+					update="growl1 			
+					     frmContent:index:addPanel  frmContent:index:listOperation
+			  			 frmContent:index:prod " />
+
+
+
+
+				<p:column headerText="libelle Produit / إسم  المنتوج" style="text-align: left; "
+					filterBy="#{t.designation_prod}">
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.designation_prod}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.designation_prod}" style="width:96%"
+								label="#{designation_prod}" />
+
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
+				<p:column style="width:25%;" headerText="modif/تغيير ">
+					<p:rowEditor />
+				</p:column>
+
+				<p:column headerText="Delete/إزالة " style="width:20%;">
+
+					<p:commandButton value="supprimer"
+						actionListener="#{produitService.delete(t)}" process="@this"
+						update="growl1 
+						 frmContent:index:addPanel        frmContent:index:listOperation
+			  			 frmContent:index:mdProd	       frmContent:index:prod ">
+
+						<p:confirm header="Confirmation" message="Are you sure?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						<p:commandButton value="Yes" type="button"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton value="No" type="button"
+							styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
+
+				</p:column>
+
+			</p:dataTable>
+		</p:panel>
+		<p:separator></p:separator>
+
+
+
+
+	</h:form>
+
+</h:body>
+</html>
+

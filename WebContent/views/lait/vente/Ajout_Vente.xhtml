@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+
+	<h:outputStylesheet name="style.css" library="css" />
+	<h:outputScript library="primefaces" name="jquery/jquery.js" />
+
+</h:head>
+
+
+<h:body styleClass="Body">
+
+
+	<p:panel
+		header="Ajout Information Produit /إضافة معلومات مبيعات  الحليب "
+		styleClass="text_normal" style="width:100%">
+		<h:panelGrid columns="3" id="addPanel" style="color:blue;width:100%"
+			cellpadding="4">
+
+
+			<h:outputLabel value="Ref_bon" />
+			<p:inputText style="width:80%" id="ref_bon_vente" 
+				value="#{venteService.objectToInsert.ref_bon_vente}">
+				<p:ajax event="blur" update="growl1  frmContent:index:ref_bon_vente"
+					listener="#{venteService.verifRefVente}" />
+			</p:inputText>
+			<h:outputLabel value="رقم فاتورة البيع" />
+
+
+			<h:outputLabel value="client" />
+			<p:selectOneMenu filter="true" style="width:60%"
+				value="#{venteService.objectToInsert.client}"
+				converter="#{clientConverter}">
+				<f:selectItems value="#{clientService.listObjects}" var="d"
+					itemValue="#{d}" itemLabel="#{d.nom}" />
+			</p:selectOneMenu>
+			<h:outputLabel value="المزود" />
+
+
+
+			<h:outputLabel value="quantite  (L)" />
+			<p:inputText style="width:80%"
+				value="#{venteService.objectToInsert.quantite}">
+				<p:ajax event="keyup" listener="#{venteService.calclMontant}"
+					update="frmContent:index:montant_k" />
+
+			</p:inputText>
+			<h:outputLabel value="كمية" />
+
+			<h:outputLabel value="prix_unitaire" />
+			<p:inputText style="width:80%"
+				value="#{venteService.objectToInsert.prix_unitaire}">
+				<p:ajax event="keyup" listener="#{venteService.calclMontant}"
+					update="frmContent:index:montant_k" />
+			</p:inputText>
+			<h:outputLabel value="سعر الوحدة" />
+
+
+
+			<h:outputLabel value="Montant_Global" />
+			<p:inputText style="width:80%" id="montant_k"
+				value="#{venteService.objectToInsert.montant_global}">
+				<f:convertNumber maxFractionDigits="2" />
+			</p:inputText>
+			<h:outputLabel value="المبلغ الإجمالي" />
+
+
+
+		</h:panelGrid>
+	</p:panel>
+	<br></br>
+
+	<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
+		update="growl1 frmContent:index:addPanel frmContent:index:listOperation"
+		action="#{venteService.createLait}" />
+
+
+</h:body>
+</html>

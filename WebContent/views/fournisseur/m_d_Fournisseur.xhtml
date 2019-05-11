@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Liste Types</title>
+
+
+
+</h:head>
+
+<h:body>
+
+<p:commandButton value="Rapport Pdf" ajax="false">
+    <p:dataExporter type="pdf" target="frmContent:index:md:tbl" fileName="List-Fournisseurs" />
+</p:commandButton>
+
+
+	<h:form id="md" style="width:100%">
+
+
+		<p:panel header="Listes Type " >
+			<p:separator></p:separator>
+
+			<p:dataTable value="#{fournisseurService.listObjects}" var="t" rows="10"
+				 editable="true" id="tbl"
+				rowsPerPageTemplate="5,10,15">
+
+				<p:ajax event="rowEdit" listener="#{fournisseurService.onRowEdit}" 
+				update="growl1" />
+
+
+
+
+				<p:column headerText="Nom Fournisseur /  الإسم" style="text-align: left; "
+					filterBy="#{t.nom}">
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.nom}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.nom}" style="width:96%" label="Nom" />
+
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
+				<p:column style="width:25%;" headerText="modif/تغيير " exportable="false">
+					<p:rowEditor />
+				</p:column>
+
+				<p:column headerText="Delete/إزالة " style="width:20%;" exportable="false">
+
+					<p:commandButton value="supprimer" 
+						actionListener="#{fournisseurService.delete(t)}" process="@this"
+						update="growl1 frmContent:index:md">
+						<p:confirm header="Confirmation" message="Are you sure?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						<p:commandButton value="Yes" type="button"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton value="No" type="button"
+							styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
+
+				</p:column>
+
+			</p:dataTable>
+		</p:panel>
+		<p:separator></p:separator>
+
+
+
+
+	</h:form>
+
+</h:body>
+</html>
+

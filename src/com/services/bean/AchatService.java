@@ -1,0 +1,393 @@
+package com.services.bean;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+
+import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.Enum.Categorie;
+import com.Enum.Types_Operation;
+import com.Enum.Types_Reglement;
+import com.Enum.Unite;
+import com.dao.interfaces.InterfAchatDao;
+import com.dao.interfaces.InterfProduitDao;
+import com.entities.Achat;
+import com.entities.Historique_Prod;
+import com.entities.Produit;
+
+@ManagedBean(name = "achatService")
+@ViewScoped
+@Service
+
+public class AchatService extends ObjectService<Achat> implements Serializable {
+
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = 1L;
+	@Autowired
+	protected Achat objectToInsert;
+
+	private List<Achat> achatListDate = null;
+
+	@Autowired
+	protected InterfAchatDao dao;
+
+	@Autowired
+	protected InterfProduitDao prodDao;
+	@Autowired
+	protected LoginService loginService;
+
+	private Set<String> listUnite = new HashSet<String>();
+	private Set<String> listReglement = new HashSet<String>();
+	boolean existe = false;
+
+	/** utilisÃ© dans la vÃ©rification d'existence dans la liste des achats **/
+
+	public AchatService() {
+
+	}
+
+	public Achat getObjectToInsert() {
+		return objectToInsert;
+	}
+
+	public void setObjectToInsert(Achat objectToInsert) {
+		this.objectToInsert = objectToInsert;
+	}
+
+	public Set<String> getListUnite() {
+		return listUnite;
+	}
+
+	public void setListUnite(Set<String> listUnite) {
+		this.listUnite = listUnite;
+	}
+
+	public Set<String> getListReglement() {
+		return listReglement;
+	}
+
+	public void setListReglement(Set<String> listReglement) {
+		this.listReglement = listReglement;
+	}
+
+	public List<Achat> getAchatListDate() {
+		return achatListDate;
+	}
+
+	public void setAchatListDate(List<Achat> achatListDate) {
+		this.achatListDate = achatListDate;
+	}
+
+	public void create() throws Exception {
+		System.out.println("inside create");
+
+		if (objectToInsert != null) {
+
+			System.out.println("inside create");
+			objectToInsert.setDateOperation(new Date());
+			dao.createInstance(objectToInsert);
+
+			// ajout de la quantite actuelle au produit
+			Produit p = prodDao.findById(objectToInsert.getProduit().getId());
+			if (p != null) {
+				// ajouter à l'historique
+				addToHisto(p);
+				// modifier la valeur actuelle du produit
+				double quantite_act = p.getQuantite_actuelle() + objectToInsert.getQuantite();
+				p.setQuantite_actuelle(quantite_act);
+				prodDao.updateIstance(p);
+
+			}
+
+			try {
+				listObjects.add(objectToInsert);
+
+			} catch (Exception e) {
+				listObjects = (List<Achat>) dao.findAll();
+
+			}
+			Help.msg = "insere avec Succès";
+			reset();
+
+		} else {
+			throw new Exception("objectToInsert can not be null");
+		}
+	}
+
+	@PostConstruct
+	public void init() {
+
+		listObjects = (List<Achat>) dao.findAll();
+		System.out.println(listObjects.size());
+
+		for (Unite u : Unite.values()) {
+			listUnite.add(u.toString());
+		}
+
+		for (Types_Reglement t : Types_Reglement.values()) {
+			listReglement.add(t.toString());
+		}
+
+	}
+
+	public List<Achat> getListAchatByDate(long nbr) {
+		List<Achat> ListAchatDate = (List<Achat>) dao.getAllByDate(nbr);
+		return ListAchatDate;
+	}
+
+	public void reset() {
+		objectToInsert = new Achat();
+
+	}
+
+	public void onRowEdit(RowEditEvent event) throws IOException {
+
+		Achat editedModele = (Achat) event.getObject();
+
+		if (editedModele != null) {
+			dao.updateIstance(editedModele);
+			Help.msg = "mise Ã  jour faite avec SuccÃ¨s";
+
+		} else {
+			System.out.println("objectToInsert is null !");
+		}
+
+	}
+
+	public void delete(Achat c) throws Exception {
+
+		if (c != null) {
+			dao.deleteInstance(c);
+			listObjects.remove(c);
+			Help.msg = "supprime avec Succes";
+
+		} else {
+			throw new Exception("objectSelected can not be null");
+		}
+	}
+
+	public void tryMe() {
+		System.out.println("inside try me");
+		System.out.println(objectToInsert.getRef_bon_achat());
+
+	}
+
+	// Recuperer la liste des achats selon type de produit
+	public List<Achat> getListAchat(Categorie c) {
+		List<Achat> listAchat = null;
+		if (listObjects != null) {
+			try {
+				listAchat = listObjects.stream().filter((p) ->
+
+				p.getProduit().getCategorie() == null ? null : p.getProduit().getCategorie() == c
+
+				).collect(Collectors.toList());
+
+			} catch (Exception e) {
+
+			}
+
+		}
+
+		return listAchat;
+	}
+
+	// Recuperer la liste des achats selon type de produit
+	public List<Achat> getListAchatDate(int nbreDay, Categorie c) throws ParseException {
+		System.out.println("debut:" + new Date());
+		List<Achat> listAll = new ArrayList<Achat>();
+
+		// Date currentD = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date currentD = sdf.parse(sdf.format(new Date()));
+		//listObjects = (List<Achat>) dao.findAll();
+		if (listObjects != null) {
+			try {
+				// System.out.println(currentD);
+				// System.out.println(addDays(currentD, nbreDay));
+
+				// listAchat.forEach(p -> System.out.println(p.getDateDePaiement()));
+
+				for (Achat a : listObjects) {
+					if (nbreDay ==1 && (sdf.parse(sdf.format(a.getDateDePaiement())).equals((currentD)))
+							&& (a.getProduit().getCategorie() == c)) {
+						listAll.add(a);
+					} else if (nbreDay !=1
+							&& sdf.parse(sdf.format(a.getDateDePaiement())).after((addDays(currentD, 0)))
+							&& sdf.parse(sdf.format(a.getDateDePaiement())).before((addDays(currentD, nbreDay+1)))
+
+							&& (a.getProduit().getCategorie() == c)
+
+					) {
+						listAll.add(a);
+
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+
+			}
+
+		}
+		System.out.println("fin:" + new Date());
+
+		return listAll;
+	}
+
+	public List<Achat> getListAchatAgricole() {
+
+		return getListAchat(Categorie.Agricole_Achat);
+
+	}
+
+	public List<Achat> getListAnimeaux() {
+
+		return getListAchat(Categorie.Animeaux_Achat);
+
+	}
+
+	public List<Achat> getListAchatAuto() {
+
+		return getListAchat(Categorie.Auto_Achat);
+
+	}
+
+	public List<Achat> getListAchatAutre() {
+
+		return getListAchat(Categorie.Autre_Achat);
+
+	}
+
+	/**
+	 * List of Date
+	 * 
+	 * @throws ParseException
+	 **/
+
+	public List<Achat> getListAchatAgricoleD(int nbr) throws ParseException {
+
+		return getListAchatDate(nbr, Categorie.Agricole_Achat);
+
+	}
+
+	public List<Achat> getListAnimeauxD(int nbr) throws ParseException {
+
+		return getListAchatDate(nbr, Categorie.Animeaux_Achat);
+
+	}
+
+	public List<Achat> getListAchatAutoD(int nbr) throws ParseException {
+
+		return getListAchatDate(nbr, Categorie.Auto_Achat);
+
+	}
+
+	public List<Achat> getListAchatAutreD(int nbr) throws ParseException {
+
+		return getListAchatDate(nbr, Categorie.Autre_Achat);
+
+	}
+
+	public void onRowSelect(SelectEvent event) throws IOException {
+
+		Achat editedModele = (Achat) event.getObject();
+		// System.out.println(editedModele.toString());
+		if (editedModele != null) {
+			// objectSelected=editedModele;
+		}
+
+	}
+
+	public void calclMontant() {
+		if (objectToInsert != null) {
+			objectToInsert.setMontant_global(objectToInsert.getPrix_unitaire() * objectToInsert.getQuantite());
+		}
+	}
+
+	// Recuperer la liste des achats selon type de produit
+	public void verifRefAchat() throws BreakException {
+		System.out.println("inside verifRefAchat");
+		System.out.println("ref Bon:" + objectToInsert.getRef_bon_achat());
+		if (listObjects != null && objectToInsert != null) {
+			try {
+
+				//
+				getListAnimeaux().stream().forEach((p) -> {
+					existe = objectToInsert.getRef_bon_achat() == null ? false
+							: objectToInsert.getRef_bon_achat().intValue() == p.getRef_bon_achat().intValue() ? true
+									: false;
+					System.out.println("ref inside loop:" + p.getRef_bon_achat().intValue());
+					if (existe) {
+						throw new BreakException();
+					}
+
+				}
+
+				);
+
+			} catch (BreakException e) {
+				Help.error_msg = "reference d'achat deja existant!" + "\n";
+				Help.error_msg2 = "هدا الرقم موجود مسبقاً";
+				objectToInsert.setRef_bon_achat(null);
+			}
+
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	public void addToHisto(Produit p) throws Exception {
+		double quantite_act = p.getQuantite_actuelle() + objectToInsert.getQuantite();
+
+		Historique_Prod hp = new Historique_Prod();
+		hp.setDate_operation(new Date());
+		hp.setProduit(p);
+		hp.setQuantite_actuel(Double.valueOf(quantite_act));
+		hp.setType_operation(Types_Operation.AUGMENTER);
+		hp.setQuantite_precedente(p.getQuantite_actuelle());
+		hp.setQuantite_operation(objectToInsert.getQuantite());
+		System.out.println("Employee:²" + loginService.getEmployeetoLog().getNom());
+		if (loginService.getEmployeetoLog() != null) {
+			hp.setUser_logged(loginService.getEmployeetoLog());
+		}
+
+		// faire appel à la methode create du Service HistoriqueService
+		HistoriqueService histoS = new HistoriqueService();
+		histoS.setObjectToInsert(hp);
+		histoS.create();
+		histoS.getListObjects().add(hp);
+
+	}
+
+	public Date addDays(Date date, int days) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DATE, days); // minus number would decrement the days
+		return cal.getTime();
+	}
+}

@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputStylesheet name="style.css" library="css" />
+</h:head>
+
+
+
+<h:body styleClass="bgimg">
+	<h:form>
+
+
+		<p:panel style="text-align:center;width:100%;height:100%">
+			<h:panelGrid columns="2" layout="grid">
+
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+
+						<p:graphicImage value="/resources/images/employee.jpg" />
+						<h:outputText value="الموظفين/les Employés" />
+
+					</h:panelGrid>
+
+				</p:panel>
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/client/index.xhtml')}">
+
+							<p:graphicImage value="/resources/images/client.jpg"
+							>
+								<h:outputText value="الزبون/Client" />
+							</p:graphicImage>
+						</p:commandLink>
+					</h:panelGrid>
+
+				</p:panel>
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+
+						<p:graphicImage value="/resources/images/founisseur.jpg" />
+						<h:outputText value="المزود/Fournisseur" />
+
+					</h:panelGrid>
+
+				</p:panel>
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+
+						<p:graphicImage value="/resources/images/lait.jpg" />
+						<h:outputText value="الحليب /le Lait" />
+
+					</h:panelGrid>
+
+				</p:panel>
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+
+						<p:graphicImage value="/resources/images/agricole.jpg" />
+						<h:outputText value="المواد الفلاحية /Matériels agricoles" />
+
+					</h:panelGrid>
+
+				</p:panel>
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+
+						<p:graphicImage value="/resources/images/camion.jpg" />
+						<h:outputText value="الشاحنة /Le camion" />
+
+					</h:panelGrid>
+
+				</p:panel>
+
+
+			</h:panelGrid>
+
+
+		</p:panel>
+
+
+
+
+
+	</h:form>
+</h:body>
+</html>
+
+

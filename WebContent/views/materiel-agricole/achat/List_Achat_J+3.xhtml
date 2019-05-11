@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+
+
+</h:head>
+
+<h:body>
+
+
+	<p:commandButton value="Rapport Pdf" ajax="false">
+		<p:dataExporter type="pdf" target="frmContent:index:listOperationJ:tbl"
+			fileName="List-Achat-agricole" />
+	</p:commandButton>
+
+
+
+	<h:form id="listOperationJ">
+
+		<p:growl id="growl" life="1000" showDetail="true" />
+
+		<p:panel header="Listes Achat Agricole /قائمة المشتريات بالمواد الفلاحية  ">
+			<p:separator></p:separator>
+
+			<p:dataTable value="#{achatService.getListAchatAgricoleD(3)}" var="t"
+				rows="10" selectionMode="single" rowKey="#{t.id}"
+				selection="#{achatService.objectSelected}" rowIndexVar="rowIndex"
+				paginator="false" id="tbl"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,100,200">
+
+				<p:ajax event="rowSelect" oncomplete="PF('achatDialog').show()"
+					listener="#{achatService.onRowSelect}"
+					update="frmContent:index:listOperationJ:carDetail" />
+
+
+
+				<p:column headerText="numero" style="text-align: left;width: ">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+
+				<p:column headerText="ref_bon_achat" style="text-align: left; "
+					filterBy="#{t.ref_bon_achat}">
+					<h:outputText value="#{t.ref_bon_achat}" />
+
+				</p:column>
+				<p:column headerText="dateAchat" style="text-align: left; "
+					filterBy="#{t.dateAchat}">
+					<h:outputText value="#{t.dateAchat}">
+						<f:convertDateTime pattern="yyyy-dd-MM" />
+					</h:outputText>
+
+				</p:column>
+
+				<p:column headerText="dateDePaiement" style="text-align: left; "
+					filterBy="#{t.dateDePaiement}">
+					<h:outputText value="#{t.dateDePaiement}">
+						<f:convertDateTime pattern="yyyy-dd-MM" />
+					</h:outputText>
+
+				</p:column>
+
+				<p:column headerText="Montant" style="text-align: left; "
+					filterBy="#{t.montant_global}">
+					<h:outputText value="#{t.montant_global}">
+					</h:outputText>
+
+				</p:column>
+
+
+
+			</p:dataTable>
+		</p:panel>
+		<p:separator></p:separator>
+
+
+
+
+		<p:dialog header="Achat Info/معلومات الشراء  الخاصة  بالمواد الفلاحية"
+			widgetVar="achatDialog" modal="false" resizable="false">
+			<p:outputPanel id="carDetail" style="text-align:center;">
+				<p:panelGrid columns="2" columnClasses="label,value">
+
+
+					<h:outputText value="Id:" />
+					<h:outputText value="#{achatService.objectSelected.id}" />
+
+					<h:outputText value="ref Bon" />
+					<h:outputText value="#{achatService.objectSelected.ref_bon_achat}" />
+
+					<h:outputText value="Fournisseur" />
+					<h:outputText
+						value="#{achatService.objectSelected.fournisseur.nom}" />
+
+					<h:outputText value="designation prod" />
+					<h:outputText
+						value="#{achatService.objectSelected.produit.designation_prod}" />
+
+					<h:outputText value="responsable" />
+					<h:outputText
+						value="#{achatService.objectSelected.responsable.nom}" />
+
+					<h:outputText value="prix_unitaire" />
+					<h:outputText value="#{achatService.objectSelected.prix_unitaire}" />
+
+					<h:outputText value="quantite" />
+					<h:outputText value="#{achatService.objectSelected.quantite}" />
+
+
+					<h:outputText value="montant_global" />
+					<h:outputText value="#{achatService.objectSelected.montant_global}" />
+
+					<h:outputText value="dateAchat" />
+					<h:outputText value="#{achatService.objectSelected.dateAchat}">
+						<f:convertDateTime pattern="yyyy-dd-MM" />
+					</h:outputText>
+
+
+
+					<h:outputText value="dateOperation" />
+					<h:outputText value="#{achatService.objectSelected.dateOperation}">
+						<f:convertDateTime pattern="yyyy-dd-MM" />
+					</h:outputText>
+
+
+					<h:outputText value="dateDePaiement" />
+					<h:outputText value="#{achatService.objectSelected.dateDePaiement}">
+						<f:convertDateTime pattern="yyyy-dd-MM" />
+					</h:outputText>
+
+
+
+
+				</p:panelGrid>
+			</p:outputPanel>
+		</p:dialog>
+
+
+	</h:form>
+
+</h:body>
+</html>
+

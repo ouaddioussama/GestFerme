@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+
+
+</h:head>
+
+<h:body>
+
+<p:commandButton value="Rapport Pdf" ajax="false">
+    <p:dataExporter type="pdf" target="frmContent:index:listOperation:tbl" fileName="List-Fournisseurs" />
+</p:commandButton>
+
+
+	<h:form id="listOperation">
+
+		<p:growl id="growl" life="1000" showDetail="true" />
+
+		<p:panel header="Listes Vente Agricoles /قائمة المبيعات  ">
+			<p:separator></p:separator>
+
+
+			<p:dataTable value="#{venteService.listVenteAgricole}" var="t"
+				rows="10" selectionMode="single" rowKey="#{t.ref_bon_achat}"
+				selection="#{venteService.objectSelected}" rowIndexVar="rowIndex"
+				paginator="true" id="tbl"
+				paginatorTemplate=" {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,100,200">
+
+
+				<p:ajax event="rowSelect" oncomplete="PF('venteDialog').show()"
+					listener="#{venteService.onRowSelect}"
+					update="frmContent:index:listOperation:carDetail" />
+
+				<p:ajax event="filter" process="@this"
+					listener="#{venteService.onFilter}"
+					update="frmContent:index:listOperation:carDetail" />
+
+
+				<p:column headerText="numero" style="text-align: left;width: ">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+
+				<p:column headerText="ref_bon_achat" style="text-align: left; "
+					filterBy="#{t.ref_bon_achat}">
+					<h:outputText value="#{t.ref_bon_achat}" />
+
+				</p:column>
+
+				<p:column headerText="ref_bon_vente" style="text-align: left; "
+					filterBy="#{t.ref_bon_vente}">
+					<h:outputText value="#{t.ref_bon_vente}" />
+
+				</p:column>
+				<p:column headerText="dateAchat" style="text-align: left; "
+					filterBy="#{t.dateAchat}">
+					<h:outputText value="#{t.dateAchat}">
+						<f:convertDateTime pattern="yyyy-dd-MM" />
+					</h:outputText>
+
+				</p:column>
+
+
+
+			</p:dataTable>
+		</p:panel>
+		<p:separator></p:separator>
+
+
+
+
+		<p:dialog header="Vente Info/معلومات الشراء  الخاصة بالمواشي"
+			widgetVar="venteDialog" modal="false" resizable="false">
+			<p:outputPanel id="carDetail" style="text-align:center;">
+				<p:panelGrid columns="2" columnClasses="label,value">
+
+
+					<h:outputText value="Id:" />
+					<h:outputText value="#{venteService.objectSelected.id}" />
+
+					<h:outputText value="ref Bon Achat" />
+					<h:outputText value="#{venteService.objectSelected.ref_bon_achat}" />
+
+					<h:outputText value="ref Bon Vente" />
+					<h:outputText value="#{venteService.objectSelected.ref_bon_vente}" />
+
+					<h:outputText value="client" />
+					<h:outputText value="#{venteService.objectSelected.client.nom}" />
+
+					<h:outputText value="designation prod" />
+					<h:outputText
+						value="#{venteService.objectSelected.produit.designation_prod}" />
+
+					<h:outputText value="responsable" />
+					<h:outputText
+						value="#{venteService.objectSelected.responsable.nom}" />
+
+					<h:outputText value="prix_unitaire" />
+					<h:outputText value="#{venteService.objectSelected.prix_unitaire}" />
+
+					<h:outputText value="quantite" />
+					<h:outputText value="#{venteService.objectSelected.quantite}" />
+
+
+					<h:outputText value="montant_global" />
+					<h:outputText value="#{venteService.objectSelected.montant_global}" />
+
+					<h:outputText value="dateAchat" />
+					<h:outputText value="#{venteService.objectSelected.dateAchat}">
+						<f:convertDateTime pattern="yyyy-dd-MM" />
+					</h:outputText>
+
+
+					<h:outputText value="dateOperation" />
+					<h:outputText value="#{venteService.objectSelected.dateOperation}">
+						<f:convertDateTime pattern="yyyy-dd-MM" />
+					</h:outputText>
+
+
+					<h:outputText value="dateDePaiement" />
+					<h:outputText value="#{venteService.objectSelected.dateDePaiement}">
+						<f:convertDateTime pattern="yyyy-dd-MM" />
+					</h:outputText>
+
+
+
+
+				</p:panelGrid>
+			</p:outputPanel>
+		</p:dialog>
+
+
+	</h:form>
+
+</h:body>
+</html>
+

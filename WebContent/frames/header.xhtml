@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+
+	<h:form>
+
+		<h:panelGrid columns="10" cellpadding="10"
+			style="background:#88b6d8;width:100%">
+
+
+			<span style="color: blue; size: 9" class="shadow"> </span>
+			<ui:include src="logo.xhtml" />
+
+
+			<div align="left"
+				style="font-family: Times New Roman, Times, serif; font-size: 20px; font-weight: bold; color: white;">
+				Application gestion De La ferme</div>
+				
+			<h:outputText
+				style="color: white; background-color:; margin-left: 30px; font-size: 15px; font-weight: bold; font-family: Times New Roman, Times, serif;"
+				value="Bienvenue #{loginService.employeetoLog.nom}"
+				rendered="#{not empty loginService.employeetoLog}" />
+
+
+				<h:outputText
+				style="color: white; background-color:; margin-left: 30px; font-size: 15px; font-weight: bold; font-family: Times New Roman, Times, serif;"
+				value="Profil : #{loginService.employeetoLog.profil}"
+				rendered="#{not empty loginService.employeetoLog}" />
+
+			<p:clock pattern="HH:mm:ss  dd.MM.yyyy" />
+
+
+			<p:commandLink update=":frmContent" style="color:blue;align:right"
+				actionListener="#{HelpBean.goRefresh('/views/acceuil')}">
+              Acceuil
+
+			</p:commandLink>
+			<p:commandLink style="color:blue;align:right" ajax="true"
+			action="#{HelpBean.logout}">
+		   Deconnexion
+		</p:commandLink>
+
+
+
+
+		</h:panelGrid>
+
+	</h:form>
+
+
+</h:body>
+</html>

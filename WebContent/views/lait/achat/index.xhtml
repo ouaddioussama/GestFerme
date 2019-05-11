@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+
+<h:body>
+
+
+
+	<div class="ui-grid-col-11" style="width: 100%">
+
+		<div align="left"
+			style="color: black; background-color: #eaeaea; margin-left: 00px; font-size: 11px; font-weight: bold; font-family: Times New Roman, Times, serif;">
+
+
+			<p:commandLink update=":frmContent"
+				actionListener="#{HelpBean.go('/views/lait/index_principale.xhtml')}">
+
+				<h:outputText value="Acceuil Achat/Ventes"
+					style="color:blue;align:right" />
+
+			</p:commandLink>
+		</div>
+
+		<p:tabView orientation="right"
+			style="background-color: #f5f5f5;width:100%" id="index">
+
+
+
+			<p:tab title="المشتريات الخاصة بالحليب ">
+			</p:tab>
+			<p:tab title="Ajout Produit /إضافة المنتوج   ">
+				<ui:include src="Ajout_Produit.xhtml" />
+
+			</p:tab>
+
+
+			<p:tab title="List Produit /قائمة المنتوجات    ">
+				<ui:include src="m_d_Produit.xhtml" />
+
+			</p:tab>
+
+			<p:tab title="Ajout des Achats /إضافة المشتريات    ">
+				<ui:include src="Ajout_Achat.xhtml" />
+
+			</p:tab>
+
+			<p:tab title="List des Achats /قائمة المشتريات    ">
+				<ui:include src="List_Achat.xhtml" />
+
+			</p:tab>
+
+
+
+
+
+		</p:tabView>
+
+
+
+
+	</div>
+</h:body>
+
+</html>

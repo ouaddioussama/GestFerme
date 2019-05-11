@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet name="style.css" library="css" />
+</h:head>
+<h:body styleClass="Body">
+
+
+	<h:form id="add">
+		<p:growl id="growl" life="5000" showDetail="true" />
+
+		<p:panel header="Ajout Information achat " style="width:100%">
+			<h:panelGrid columns="4" id="panelmodelAchat"
+				style="color:blue;width:100%" cellpadding="4">
+
+
+
+				<h:outputLabel value="Produit" />
+				<p:selectOneMenu filter="true" style="width:60%" id="selectmenu"
+					value="#{achatService.objectToInsert.produit}"
+					converter="#{produitConverter}">
+					<f:selectItems value="#{produitService.listObjects}" var="d"
+						itemValue="#{d}" itemLabel="#{d.designation_prod}" />
+				</p:selectOneMenu>
+
+
+				<h:outputLabel value="Ref_bon_achat" />
+				<p:inputText style="width:80%"
+					value="#{achatService.objectToInsert.ref_bon_achat}" />
+
+
+
+
+				<h:outputLabel value="Fournisseur" />
+				<p:selectOneMenu filter="true" style="width:60%"
+					value="#{achatService.objectToInsert.fournisseur}"
+					converter="#{fournisseurConverter}">
+					<f:selectItems value="#{FournisseurService.listObjects}" var="d"
+						itemValue="#{d}" itemLabel="#{d.nom}" />
+				</p:selectOneMenu>
+
+
+				<h:outputLabel value="Type Unité " styleClass="text_normal" />
+				<p:selectOneMenu filter="true" style="width:60%"
+					value="#{achatService.objectToInsert.unite}">
+					<f:selectItems value="#{achatService.listUnite}" var="cc"
+						itemValue="#{cc}" itemLabel="#{cc}" />
+				</p:selectOneMenu>
+
+				<h:outputLabel value="quantite" />
+				<p:inputText style="width:80%"
+					value="#{achatService.objectToInsert.quantite}" />
+
+				<h:outputLabel value="prix_unitaire" />
+				<p:inputText style="width:80%"
+					value="#{achatService.objectToInsert.prix_unitaire}" />
+
+
+				<h:outputLabel value="Montant_Global" />
+				<p:inputText style="width:80%"
+					value="#{achatService.objectToInsert.montant_global}" />
+
+
+				<h:outputLabel value="Responsable d'achat" />
+				<p:selectOneMenu filter="true" style="width:60%"
+					value="#{achatService.objectToInsert.responsable}"
+					converter="#{employeeConverter}">
+					<f:selectItems value="#{employeeService.listObjects}" var="d"
+						itemValue="#{d}" itemLabel="#{d.nom}" />
+				</p:selectOneMenu>
+
+				<h:outputLabel value="mode_de_paiement" styleClass="text_normal" />
+				<p:selectOneMenu filter="true" style="width:60%"
+					value="#{achatService.objectToInsert.mode_paiement}">
+					<f:selectItems value="#{achatService.listReglement}" var="cc"
+						itemValue="#{cc}" itemLabel="#{cc}" />
+				</p:selectOneMenu>
+
+
+
+
+				<h:outputLabel value="Designation d'achat" />
+				<p:inputText style="width:80%"
+					value="#{achatService.objectToInsert.designation_achat}" />
+
+
+				<p:outputLabel value="Date Achat" />
+				<p:calendar id="calend" showOn="button"
+					pattern="MM/dd/yyyy HH:mm:ss"
+					value="#{achatService.objectToInsert.dateOperation}" />
+
+
+
+			</h:panelGrid>
+		</p:panel>
+		<br></br>
+
+	<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
+		action="#{achatService.create}"  />
+
+
+	</h:form>
+</h:body>
+</html>

@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Liste Types</title>
+
+
+
+</h:head>
+
+<h:body>
+	<h:form id="md" style="width:100%">
+
+
+		<p:panel header="Listes Type ">
+			<p:separator></p:separator>
+
+			<p:commandLink ajax="false">
+				<p:graphicImage name="/resources/images/pdf.jpg" width="24" />pdf
+				<p:dataExporter type="pdf" target="tbl" fileName="myxml" />
+			</p:commandLink>
+
+			<p:dataTable value="#{clientService.listObjects}" var="t" rows="10"
+				editable="true" paginator="true" id="tbl" rowKey="#{rowIndex}"
+				rowIndexVar="rowIndex"
+				paginatorTemplate="{Exporters} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}  {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,100,200">
+
+	
+				<f:facet name="{Exporters}">
+					<div >
+
+						<h:commandLink>
+						   <img src="../../resources/images/pdf.jpg" />
+							<p:dataExporter type="pdf" target="tbl" fileName="clients" />
+						</h:commandLink>
+
+					</div>
+				</f:facet>
+
+
+
+				<p:column headerText="Nom / الإسم" style="text-align: left; "
+					filterBy="#{t.nom}">
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.nom}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.nom}" style="width:96%" label="Nom" />
+
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
+
+
+
+			</p:dataTable>
+		</p:panel>
+		<p:separator></p:separator>
+
+
+
+
+	</h:form>
+
+</h:body>
+</html>
+

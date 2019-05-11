@@ -1,0 +1,12 @@
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ >
+
+	<url-mapping id="login">
+		<pattern value="/views" />
+		<view-id value="/views/index.xhtml" />
+	</url-mapping>
+
+    <rewrite match="/views/index.xhtml" substitute="/views" redirect="301"/>
+
+</pretty-config>

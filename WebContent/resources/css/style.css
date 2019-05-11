@@ -1,0 +1,3 @@
+.bgimg {
+	 background-image:url(#{request.contextPath}/resources/images/Background.jpg); 
+}

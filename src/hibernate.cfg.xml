@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+        <property name="hibernate.dialect">ma.projet.util.CustomMysqlDialect</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/_Gest_LaFerme?createDatabaseIfNotExist=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password"></property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.connection.pool_size">10</property>
+		<property name="show_sql">false</property>
+		<property name="format_sql">false</property>
+		<property name="use_sql_comments">false</property>
+		
+		<property name="hibernate.connection.CharSet">utf8</property>
+		<property name="hibernate.connection.characterEncoding">utf8</property>
+		<property name="hibernate.connection.useUnicode">true</property>
+
+		<mapping class="com.entities.Client" />
+		<mapping class="com.entities.Fournisseur" />
+		<mapping class="com.entities.Employee" />
+		<mapping class="com.entities.Produit" />
+		<mapping class="com.entities.Achat" />
+		<mapping class="com.entities.Vente" />
+		<mapping class="com.entities.Fiche_Personnel" />
+		<mapping class="com.entities.Fich_Remb_Lait" />
+		<mapping class="com.entities.Historique_Prod" />
+
+
+	</session-factory>
+</hibernate-configuration>

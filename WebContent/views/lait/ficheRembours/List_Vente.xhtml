@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+
+
+</h:head>
+
+<h:body>
+	<h:form id="listOperationFich">
+
+		<p:growl id="growl" life="1000" showDetail="true" />
+
+		<p:panel header="Listes Vente rembourssé /قائمة المبيعات المستخلصة ">
+			<p:separator></p:separator>
+
+
+			<p:dataTable value="#{ficheLaitService.listObjects}" var="t"
+				id="RembventeLait" rows="10" selectionMode="single" rowKey="#{t.id}"
+				selection="#{ficheLaitService.objectSelected}"
+				rowIndexVar="rowIndex" paginator="false"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,100,200">
+
+				<p:ajax event="rowSelect" oncomplete="PF('venteDialog').show()"
+					listener="#{ficheLaitService.onRowSelect}"
+					update="frmContent:index:listOperationFich:carDetail" />
+
+
+				<p:column headerText="numero" style="text-align: left;width: ">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+
+				<p:column headerText="date D'operation" style="text-align: left; "
+					filterBy="#{t.date_operation}">
+					<h:outputText value="#{t.date_operation}">
+						<f:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+
+				</p:column>
+
+				<p:column headerText="date Du Paiement" style="text-align: left; "
+					filterBy="#{t.date_paiement}">
+					<h:outputText value="#{t.date_paiement}">
+						<f:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+
+				</p:column>
+
+
+
+			</p:dataTable>
+		</p:panel>
+		<p:separator></p:separator>
+
+
+
+
+		<p:dialog header="Vente Info/معلومات المبيعات المستخلصة"
+			widgetVar="venteDialog" modal="false" resizable="false">
+			<p:outputPanel id="carDetail" style="text-align:center;">
+				<p:panelGrid columns="2" columnClasses="label,value">
+
+
+					<h:outputText value="Id:" />
+					<h:outputText value="#{ficheLaitService.objectSelected.id}" />
+
+					<h:outputText value="Client :" />
+					<h:outputText value="#{ficheLaitService.objectSelected.client.nom}" />
+
+
+					<h:outputText value="montant_global" />
+					<h:outputText value="#{ficheLaitService.objectSelected.montant}" />
+
+
+					<h:outputText value="date d'operation" />
+					<h:outputText
+						value="#{ficheLaitService.objectSelected.date_operation}">
+						<f:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+
+					<h:outputText value="date De paiement" />
+					<h:outputText
+						value="#{ficheLaitService.objectSelected.date_paiement}">
+						<f:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+
+
+				</p:panelGrid>
+			</p:outputPanel>
+		</p:dialog>
+
+
+	</h:form>
+
+</h:body>
+</html>
+

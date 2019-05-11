@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputStylesheet name="style.css" library="css" />
+</h:head>
+
+
+
+<h:body styleClass="bgimg">
+	<h:form>
+
+
+		<p:panel style="text-align:center;width:120%;height:100%">
+			<h:panelGrid columns="3" layout="grid">
+
+
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+						<div style="white-space: pre-wrap">
+							<h:outputText style="align:right" value="الزبون/Client" />
+						</div>
+
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/client/index.xhtml')}">
+
+							<p:graphicImage value="/resources/images/client.jpg">
+							</p:graphicImage>
+
+
+						</p:commandLink>
+					</h:panelGrid>
+
+				</p:panel>
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+						<div style="white-space: pre-wrap">
+							<h:outputText style="align:right" value="المزود/Fournisseur" />
+						</div>
+
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/fournisseur/index.xhtml')}">
+
+							<p:graphicImage value="/resources/images/founisseur.jpg">
+							</p:graphicImage>
+
+						</p:commandLink>
+
+					</h:panelGrid>
+
+				</p:panel>
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+						<div style="white-space: pre-wrap">
+							<h:outputText value="الموظفين/les Employés" />
+						</div>
+
+
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/employee/index_principale.xhtml')}">
+
+
+							<p:graphicImage value="/resources/images/employee.jpg" />
+						</p:commandLink>
+					</h:panelGrid>
+
+				</p:panel>
+
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+						<div style="white-space: pre-wrap">
+							<h:outputText style="align:right"
+								value="المواد الفلاحية /Matériels agricoles" />
+						</div>
+
+
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/materiel-agricole/index_principale.xhtml')}">
+
+							<p:graphicImage value="/resources/images/agricole.jpg" />
+						</p:commandLink>
+
+					</h:panelGrid>
+
+				</p:panel>
+
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+						<div style="white-space: pre-wrap">
+							<h:outputText style="align:right"
+								value="خاص بالبقر والغنم /Elevage de vache et mouton" />
+						</div>
+
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/animaux/index_principale.xhtml')}">
+
+							<p:graphicImage value="/resources/images/animals.jpg" />
+						</p:commandLink>
+
+					</h:panelGrid>
+
+				</p:panel>
+
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+						<div style="white-space: pre-wrap">
+							<h:outputText value="الحليب /le Lait" />
+						</div>
+
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/lait/index_principale.xhtml')}">
+							<p:graphicImage value="/resources/images/lait.jpg" />
+						</p:commandLink>
+					</h:panelGrid>
+
+				</p:panel>
+
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+
+						<div style="white-space: pre-wrap">
+							<h:outputText value="الشاحنة /Le camion" />
+						</div>
+
+
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/auto/index_principale.xhtml')}">
+
+							<p:graphicImage value="/resources/images/camion.jpg" />
+
+						</p:commandLink>
+					</h:panelGrid>
+
+				</p:panel>
+
+
+
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+						<div style="white-space: pre-wrap">
+							<h:outputText value="Autre / مواد أخرى" />
+						</div>
+
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/autre/index_principale.xhtml')}">
+							<p:graphicImage value="/resources/images/autre.jpg" />
+						</p:commandLink>
+					</h:panelGrid>
+
+				</p:panel>
+
+
+			</h:panelGrid>
+
+
+
+
+
+		</p:panel>
+
+
+
+
+
+	</h:form>
+</h:body>
+</html>
+
+
