@@ -20,7 +20,7 @@
 
 
 			<p:commandLink update=":frmContent"
-				actionListener="#{HelpBean.go('/views/lait/index_principale.xhtml')}">
+				actionListener="#{HelpBean.goRefresh('/views/lait/index_principale')}">
 
 				<h:outputText value="Acceuil Achat/Ventes"
 					style="color:blue;align:right" />
@@ -35,16 +35,24 @@
 			<p:tab title=" مستخلصات المبيعات  الخاصة بالحليب ">
 			</p:tab>
 
-			<p:tab title="Ajout des Ventes /إضافة المبيعات    ">
+			<p:tab title="Ajout des Ventes rembourssées /إضافة مستخلصات المبيعات    ">
 				<ui:include src="Ajout_Vente.xhtml" />
 
 			</p:tab>
 
-			<p:tab title="List des Ventes /قائمة المبيعات    ">
+			<p:tab
+				title="List des Ventes Après remboursement /قائمة المبيعات بعد تسديد الديون ">
 				<ui:include src="List_Vente.xhtml" />
 
 			</p:tab>
 
+
+	
+			<p:tab
+				title="List des Calculs Ventes ">
+				<ui:include src="List_Vente_calcule.xhtml" />
+
+			</p:tab>
 	
 
 

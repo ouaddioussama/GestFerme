@@ -19,7 +19,7 @@
 
 
 	<p:panel
-		header="Ajout Information Produit /إضافة معلومات منتوجات  المواشي "
+		header="Ajout Information Produit /إضافة معلومات منتوجات "
 		styleClass="text_normal" style="width:100%">
 		<h:panelGrid columns="3" id="addPanel" style="color:blue;width:100%"
 			 cellpadding="4">
@@ -28,7 +28,7 @@
 			<p:selectOneMenu filter="true" style="width:60%" id="selectmenu"
 				value="#{achatService.objectToInsert.produit}"
 				converter="#{produitConverter}">
-				<f:selectItems value="#{produitService.listProduitAgricoleAchat}"
+				<f:selectItems value="#{produitService.listProduitAutreAchat}"
 					var="d" itemValue="#{d}" itemLabel="#{d.designation_prod}" />
 			</p:selectOneMenu>
 			<h:outputLabel value="المنتوج" />
@@ -115,14 +115,14 @@
 
 
 			<p:outputLabel value="Date Achat" />
-			<p:calendar id="calend" showOn="button" pattern="MM/dd/yyyy"
+			<p:calendar id="calend" showOn="button" pattern="dd/MM/yyyy"
 				value="#{achatService.objectToInsert.dateAchat}" />
 			<p:outputLabel value="تاريخ الشراء" />
 
 
 
 			<p:outputLabel value="Date de paiement/echance" />
-			<p:calendar showOn="button" pattern="MM/dd/yyyy"
+			<p:calendar showOn="button" pattern="dd/MM/yyyy"
 				value="#{achatService.objectToInsert.dateDePaiement}" />
 			<p:outputLabel value="تاريخ الدفع" />
 
@@ -135,7 +135,8 @@
 	<br></br>
 
 	<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
-		update="growl1 frmContent:index:addPanel frmContent:index:listOperation"
+		update="growl1 frmContent:index:addPanel frmContent:index:listOperation frmContent:index:mdProd
+		frmContent:index:listOperationD frmContent:index:listOperationJ"
 		action="#{achatService.create}" />
 
 

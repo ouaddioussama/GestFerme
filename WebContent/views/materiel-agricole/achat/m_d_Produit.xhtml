@@ -10,6 +10,7 @@
 </h:head>
 
 <h:body>
+
 	<h:form id="mdProd" style="width:100%">
 
 
@@ -17,20 +18,20 @@
 			header="Listes des Produits /قائمة المنتوجات الخاصة بالمواد الفلاحية ">
 			<p:separator></p:separator>
 
-			<p:dataTable value="#{produitService.listProduitAgricoleAchat}" var="t"
-				rowKey="#{t.id}" rowIndexVar="rowIndex" rows="10" editable="true"
-				rowsPerPageTemplate="5,10,15">
+			<p:dataTable value="#{produitService.listProduitAgricoleAchat}"
+				var="t" rowKey="#{t.id}" rowIndexVar="rowIndex" rows="10" id="tbl"
+				editable="true" rowsPerPageTemplate="5,10,15">
 
 				<p:ajax event="rowEdit" listener="#{produitService.onRowEdit}"
-					update="growl1 			
-					     frmContent:index:addPanel  frmContent:index:listOperation
+					update="growl1 	 frmContent:index:listProd		
+					     frmContent:index:addPanel  frmContent:index:listOperation frmContent:index:listOperationJ frmContent:index:listOperationD
 			  			 frmContent:index:prod " />
 
 
 
 
-				<p:column headerText="libelle Produit / إسم  المنتوج" style="text-align: left; "
-					filterBy="#{t.designation_prod}">
+				<p:column headerText="libelle Produit / إسم  المنتوج"
+					style="text-align: left; " >
 
 					<p:cellEditor>
 						<f:facet name="output">
@@ -44,16 +45,20 @@
 					</p:cellEditor>
 				</p:column>
 
+				<p:column headerText="quantite Actuelle" style="text-align: left;width: ">
+					<h:outputText value="#{t.quantite_actuelle}" />
+				</p:column>
 
-				<p:column style="width:25%;" headerText="modif/تغيير ">
+
+				<p:column style="width:25%;" headerText="modif/تغيير " exportable="false">
 					<p:rowEditor />
 				</p:column>
 
-				<p:column headerText="Delete/إزالة " style="width:20%;">
+				<p:column headerText="Delete/إزالة " style="width:20%;" exportable="false">
 
-					<p:commandButton value="supprimer"
+					<p:commandButton value="supprimer" 
 						actionListener="#{produitService.delete(t)}" process="@this"
-						update="growl1 
+						update="growl1  frmContent:index:listProd
 						 frmContent:index:addPanel        frmContent:index:listOperation
 			  			 frmContent:index:mdProd	       frmContent:index:prod ">
 

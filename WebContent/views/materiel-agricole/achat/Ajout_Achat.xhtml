@@ -38,7 +38,7 @@
 			<p:inputText style="width:80%" id="ref_bon_achat"
 				value="#{achatService.objectToInsert.ref_bon_achat}">
 				<p:ajax event="blur" update="growl1  frmContent:index:ref_bon_achat"
-					listener="#{achatService.verifRefAchat}" />
+					listener="#{achatService.verifRefAchatAgricole}" />
 			</p:inputText>
 			<h:outputLabel value="رقم فاتورة الشراء" />
 
@@ -115,14 +115,14 @@
 
 
 			<p:outputLabel value="Date Achat" />
-			<p:calendar id="calend" showOn="button" pattern="MM/dd/yyyy"
+			<p:calendar id="calend" showOn="button" pattern="dd/MM/yyyy"
 				value="#{achatService.objectToInsert.dateAchat}" />
 			<p:outputLabel value="تاريخ الشراء" />
 
 
 
 			<p:outputLabel value="Date de paiement/echance" />
-			<p:calendar showOn="button" pattern="MM/dd/yyyy"
+			<p:calendar showOn="button" pattern="dd/MM/yyyy"
 				value="#{achatService.objectToInsert.dateDePaiement}" />
 			<p:outputLabel value="تاريخ الدفع" />
 
@@ -136,7 +136,8 @@
 
 	<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
 		update="growl1 frmContent:index:addPanel frmContent:index:listOperation 
-		frmContent:index:listOperationD  frmContent:index:listOperationJ "
+		frmContent:index:listOperationD  frmContent:index:listOperationJ 
+		frmContent:index:mdProd frmContent:index:listProd"
 		action="#{achatService.create}" />
 
 

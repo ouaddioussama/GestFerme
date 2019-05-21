@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,6 +19,9 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SelectableDataModel;
+import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,7 @@ import com.entities.Produit;
 @ViewScoped
 @Service
 
-public class AchatService extends ObjectService<Achat> implements Serializable {
+public class AchatService extends ObjectService<Achat> implements Serializable,SelectableDataModel<Achat> {
 
 	/**
 	* 
@@ -47,6 +49,8 @@ public class AchatService extends ObjectService<Achat> implements Serializable {
 	protected Achat objectToInsert;
 
 	private List<Achat> achatListDate = null;
+	
+	//private List<Achat> filtered;
 
 	@Autowired
 	protected InterfAchatDao dao;
@@ -59,6 +63,8 @@ public class AchatService extends ObjectService<Achat> implements Serializable {
 	private Set<String> listUnite = new HashSet<String>();
 	private Set<String> listReglement = new HashSet<String>();
 	boolean existe = false;
+	boolean hide = false;
+	private boolean paginatorActive = true;
 
 	/** utilisÃ© dans la vÃ©rification d'existence dans la liste des achats **/
 
@@ -98,6 +104,39 @@ public class AchatService extends ObjectService<Achat> implements Serializable {
 		this.achatListDate = achatListDate;
 	}
 
+	public boolean getHide() {
+		return hide;
+	}
+
+	public void setHide(boolean hide) {
+		this.hide = hide;
+	}
+
+	public void changeHide() {
+		System.out.println("inside setHide");
+		this.setHide(true);
+		System.out.println(this.getHide());
+	}
+
+	public void resetHide() {
+		System.out.println("inside resetHide");
+		this.setHide(false);
+		System.out.println(this.getHide());
+	}
+
+	public void activatePaginator() {
+		paginatorActive = true;
+	} 
+
+	public void deactivatePaginator() {
+		paginatorActive = false;
+	}
+
+	public boolean isPaginatorActive() {
+		return paginatorActive;
+	}
+	
+
 	public void create() throws Exception {
 		System.out.println("inside create");
 
@@ -106,6 +145,10 @@ public class AchatService extends ObjectService<Achat> implements Serializable {
 			System.out.println("inside create");
 			objectToInsert.setDateOperation(new Date());
 			dao.createInstance(objectToInsert);
+
+			if (loginService.getEmployeetoLog() != null) {
+				objectToInsert.setUser_logged(loginService.getEmployeetoLog());
+			}
 
 			// ajout de la quantite actuelle au produit
 			Produit p = prodDao.findById(objectToInsert.getProduit().getId());
@@ -126,7 +169,7 @@ public class AchatService extends ObjectService<Achat> implements Serializable {
 				listObjects = (List<Achat>) dao.findAll();
 
 			}
-			Help.msg = "insere avec Succès";
+			Help.msg = "insere avec Succes";
 			reset();
 
 		} else {
@@ -136,6 +179,20 @@ public class AchatService extends ObjectService<Achat> implements Serializable {
 
 	@PostConstruct
 	public void init() {
+		
+		dataModel = new LazyDataModel<Achat>() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public List<Achat> load(int first, int pageSize, String sortField, SortOrder sortOrder,
+					Map<String, Object> filters) {
+				// TODO Auto-generated method stub
+				setRowCount(dao.getCountAll());
+				return dao.LazyList(first, pageSize, sortField, SortOrder.ASCENDING.equals(sortOrder));
+			}
+
+		};
 
 		listObjects = (List<Achat>) dao.findAll();
 		System.out.println(listObjects.size());
@@ -166,7 +223,7 @@ public class AchatService extends ObjectService<Achat> implements Serializable {
 
 		if (editedModele != null) {
 			dao.updateIstance(editedModele);
-			Help.msg = "mise Ã  jour faite avec SuccÃ¨s";
+			Help.msg = "mise a jour faite avec Succes";
 
 		} else {
 			System.out.println("objectToInsert is null !");
@@ -221,7 +278,7 @@ public class AchatService extends ObjectService<Achat> implements Serializable {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date currentD = sdf.parse(sdf.format(new Date()));
-		//listObjects = (List<Achat>) dao.findAll();
+		// listObjects = (List<Achat>) dao.findAll();
 		if (listObjects != null) {
 			try {
 				// System.out.println(currentD);
@@ -230,12 +287,12 @@ public class AchatService extends ObjectService<Achat> implements Serializable {
 				// listAchat.forEach(p -> System.out.println(p.getDateDePaiement()));
 
 				for (Achat a : listObjects) {
-					if (nbreDay ==1 && (sdf.parse(sdf.format(a.getDateDePaiement())).equals((currentD)))
+					if (nbreDay == 1 && (sdf.parse(sdf.format(a.getDateDePaiement())).equals((currentD)))
 							&& (a.getProduit().getCategorie() == c)) {
 						listAll.add(a);
-					} else if (nbreDay !=1
+					} else if (nbreDay != 1
 							&& sdf.parse(sdf.format(a.getDateDePaiement())).after((addDays(currentD, 0)))
-							&& sdf.parse(sdf.format(a.getDateDePaiement())).before((addDays(currentD, nbreDay+1)))
+							&& sdf.parse(sdf.format(a.getDateDePaiement())).before((addDays(currentD, nbreDay + 1)))
 
 							&& (a.getProduit().getCategorie() == c)
 
@@ -326,15 +383,39 @@ public class AchatService extends ObjectService<Achat> implements Serializable {
 		}
 	}
 
+	public void verifRefAchatAgricole() throws BreakException {
+		verifRefAchat(Categorie.Agricole_Achat);
+
+	}
+
+	public void verifRefAchatAnimaux() throws BreakException {
+		verifRefAchat(Categorie.Animeaux_Achat);
+
+	}
+
+	public void verifRefAchatLait() throws BreakException {
+		verifRefAchat(Categorie.Lait);
+
+	}
+
+	public void verifRefAchatTransport() throws BreakException {
+		verifRefAchat(Categorie.Auto_Achat);
+
+	}
+
+	public void verifRefAchatAutre() throws BreakException {
+		verifRefAchat(Categorie.Autre_Achat);
+	}
+
 	// Recuperer la liste des achats selon type de produit
-	public void verifRefAchat() throws BreakException {
+	public void verifRefAchat(Categorie c) throws BreakException {
 		System.out.println("inside verifRefAchat");
 		System.out.println("ref Bon:" + objectToInsert.getRef_bon_achat());
 		if (listObjects != null && objectToInsert != null) {
 			try {
 
 				//
-				getListAnimeaux().stream().forEach((p) -> {
+				listObjects.stream().filter(f -> f.getProduit().getCategorie() == c).forEach((p) -> {
 					existe = objectToInsert.getRef_bon_achat() == null ? false
 							: objectToInsert.getRef_bon_achat().intValue() == p.getRef_bon_achat().intValue() ? true
 									: false;
@@ -390,4 +471,19 @@ public class AchatService extends ObjectService<Achat> implements Serializable {
 		cal.add(Calendar.DATE, days); // minus number would decrement the days
 		return cal.getTime();
 	}
+	
+	@Override
+	public Achat getRowData(String rowKey) {
+		for (Achat mandatory : dataModel) {
+			if (mandatory.getId().toString().equals(rowKey))
+				return mandatory;
+		}
+		return null;
+	}
+
+	@Override
+	public Object getRowKey(Achat mandatory) {
+		return mandatory;
+	}
+
 }

@@ -17,7 +17,7 @@
 			header="Listes des Produits /قائمة المنتوجات الخاصة بالمواشي ">
 			<p:separator></p:separator>
 
-			<p:dataTable value="#{produitService.listProduitAgricoleVente}"
+			<p:dataTable value="#{produitService.listProduitAutreVente}"
 				var="t" rowKey="#{t.id}" rowIndexVar="rowIndex" rows="10" 
 				editable="true" rowsPerPageTemplate="5,10,15">
 
@@ -43,6 +43,12 @@
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
+
+				<p:column headerText="quantite Actuelle" style="text-align: left;width: ">
+					<h:outputText value="#{t.quantite_actuelle}" />
+				</p:column>
+
+
 
 
 				<p:column style="width:25%;" headerText="modif/تغيير ">

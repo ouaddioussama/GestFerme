@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+
+</h:head>
+
+<h:body>
+	<h:form id="mdSecurity">
+
+		<p:growl id="growl" life="1000" showDetail="true" />
+
+		<p:panel header="Listes Type ">
+			<p:separator></p:separator>
+
+			<p:dataTable value="#{securityService.listObjects}"
+				paginatorPosition="TOP" selectionMode="single" var="t"
+				paginator="true" rows="30" id="TypeTables" editable="true"
+				widgetVar="TypeTables" rowKey="#{t.id}" style="size:20"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="30,100">
+
+				<p:column headerText="client" style="text-align: left; "
+					filterBy="#{t.nom_client}">
+					<h:outputText value="#{t.nom_client}" />
+
+				</p:column>
+
+
+				<p:column headerText="imac_adresse" style="text-align: left; "
+					filterBy="#{t.mac_adresse}">
+					<h:outputText value="#{t.mac_adresse}" />
+
+				</p:column>
+
+				<p:column headerText="active" style="text-align: left; "
+					filterBy="#{t.active}">
+					<h:outputText value="#{t.active}" />
+
+				</p:column>
+
+
+				<p:column headerText="Date Debut" style="text-align: left; "
+					filterBy="#{t.date_debut}">
+					<h:outputText value="#{t.date_debut}">
+						<f:convertDateTime pattern="yyyy-MM-dd" />
+					</h:outputText>
+
+				</p:column>
+
+
+				<p:column headerText="Date fin" style="text-align: left; "
+					filterBy="#{t.date_debut}">
+					<h:outputText value="#{t.date_debut}">
+						<f:convertDateTime pattern="yyyy-MM-dd" />
+					</h:outputText>
+
+				</p:column>
+
+
+
+			</p:dataTable>
+		</p:panel>
+		<p:separator></p:separator>
+
+
+	</h:form>
+
+</h:body>
+</html>
+

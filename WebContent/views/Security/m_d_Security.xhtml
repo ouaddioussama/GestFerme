@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+
+</h:head>
+
+<h:body>
+	<h:form id="mdSecurity">
+
+		<p:growl id="growl" life="1000" showDetail="true" />
+
+		<p:panel header="Listes Type ">
+			<p:separator></p:separator>
+
+			<p:dataTable value="#{securityService.listObjects}"
+				paginatorPosition="TOP" selectionMode="single" var="t"
+				paginator="true" rows="30" id="TypeTables" editable="true"
+				widgetVar="TypeTables" rowKey="#{t.id}" style="size:20"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="30,100">
+
+				<p:ajax event="rowEdit" listener="#{securityService.onRowEdit}"
+					update="growl1" />
+
+				<p:column headerText="client" style="text-align: left; "
+					filterBy="#{t.nom_client}">
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.nom_client}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.nom_client}" style="width:96%"
+								label="nom_client" />
+
+						</f:facet>
+					</p:cellEditor>
+
+				</p:column>
+
+
+				<p:column headerText="imac_adresse" style="text-align: left; "
+					filterBy="#{t.mac_adresse}">
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.mac_adresse}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.mac_adresse}" style="width:96%"
+								label="imac_adresse" />
+
+						</f:facet>
+					</p:cellEditor>
+
+
+				</p:column>
+
+				<p:column headerText="active" style="text-align: left; "
+					filterBy="#{t.active}">
+					<h:outputText value="#{t.active}" />
+
+				</p:column>
+
+
+				<p:column headerText="Date Debut" style="text-align: left; "
+					filterBy="#{t.date_debut}">
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.date_debut}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:calendar showOn="button" pattern="dd/MM/yyyy"
+								value="#{t.date_debut}" />
+						</f:facet>
+					</p:cellEditor>
+
+
+
+
+
+				</p:column>
+
+
+				<p:column headerText="Date fin" style="text-align: left; "
+					filterBy="#{t.date_fin}">
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.date_fin}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:calendar showOn="button" pattern="dd/MM/yyyy"
+								value="#{t.date_fin}" />
+						</f:facet>
+					</p:cellEditor>
+
+
+
+
+				</p:column>
+
+				<p:column style="width:25%;" headerText="modif/تغيير "
+					exportable="false">
+					<p:rowEditor />
+				</p:column>
+
+				<p:column headerText="Delete/إزالة " style="width:20%;"
+					exportable="false">
+
+					<p:commandButton value="supprimer"
+						actionListener="#{securityService.delete(t)}" process="@this"
+						update="growl1 frmContent:index:mdSecurity">
+						<p:confirm header="Confirmation" message="Are you sure?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						<p:commandButton value="Yes" type="button"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton value="No" type="button"
+							styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
+
+				</p:column>
+
+			</p:dataTable>
+		</p:panel>
+		<p:separator></p:separator>
+
+
+	</h:form>
+
+</h:body>
+</html>
+

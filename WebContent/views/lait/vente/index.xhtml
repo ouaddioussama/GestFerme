@@ -20,7 +20,7 @@
 
 
 			<p:commandLink update=":frmContent"
-				actionListener="#{HelpBean.go('/views/lait/index_principale.xhtml')}">
+				actionListener="#{HelpBean.goRefresh('/views/lait/index_principale')}">
 
 				<h:outputText value="Acceuil Achat/Ventes"
 					style="color:blue;align:right" />
@@ -46,10 +46,11 @@
 			</p:tab>
 
 			<p:tab
-				title="List des Ventes Après remboursement /قائمة المبيعات بعد تسديد الديون ">
-				<ui:include src="List_Vente_Remboursement.xhtml" />
+				title="List des Calculs Ventes ">
+				<ui:include src="List_Vente_calcule.xhtml" />
 
 			</p:tab>
+
 
 
 

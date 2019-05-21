@@ -26,7 +26,7 @@
 
 
 			<h:outputLabel value="Ref_bon" />
-			<p:inputText style="width:80%" id="ref_bon_vente" 
+			<p:inputText style="width:80%" id="ref_bon_vente"
 				value="#{venteService.objectToInsert.ref_bon_vente}">
 				<p:ajax event="blur" update="growl1  frmContent:index:ref_bon_vente"
 					listener="#{venteService.verifRefVente}" />
@@ -72,13 +72,21 @@
 			<h:outputLabel value="المبلغ الإجمالي" />
 
 
+			<p:outputLabel value="Date" />
+			<p:calendar id="calend" showOn="button" pattern="dd/MM/yyyy"
+				value="#{venteService.objectToInsert.dateDePaiement}" />
+			<p:outputLabel value="تاريخ " />
+
+
+
 
 		</h:panelGrid>
 	</p:panel>
 	<br></br>
 
 	<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
-		update="growl1 frmContent:index:addPanel frmContent:index:listOperation"
+		update="growl1 frmContent:index:addPanel 
+		frmContent:index:listOperation:listLait  frmContent:index:listOperationCalc"
 		action="#{venteService.createLait}" />
 
 

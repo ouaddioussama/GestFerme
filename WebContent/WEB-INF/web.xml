@@ -43,7 +43,24 @@
   <context-param>
     <param-name>primefaces.THEME</param-name>
     <param-value>redmond</param-value>
-  </context-param>
+  </context-param> 
+  
+   <context-param>
+   <param-name>primefaces.FONT_AWESOME</param-name>
+   <param-value>true</param-value>
+   </context-param>
+   
+    <filter>
+    <filter-name>Logginfilter</filter-name>
+    <filter-class>com.filters.LoginFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>Logginfilter</filter-name>
+    <url-pattern>/views</url-pattern>
+</filter-mapping>
+   
+   
+   
   <filter>
     <filter-name>Pretty Filter</filter-name>
     <filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>

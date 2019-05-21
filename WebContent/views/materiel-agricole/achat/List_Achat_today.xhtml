@@ -13,11 +13,18 @@
 
 <h:body>
 
+	<p:commandButton value="Print" icon="fa fa-print" style="width:30%">
+		<p:printer target="frmContent:index:listOperationD:tblD" />
 
-	<p:commandButton value="Rapport Pdf" ajax="false">
-		<p:dataExporter type="pdf" target="frmContent:index:listOperationD:tblD"
+	</p:commandButton>
+	<p:spacer width="100" height="10" />
+	<p:commandButton value="Rapport Pdf" icon="fa fa-download" 
+	 ajax="false" style="width:30%">
+		<p:dataExporter type="pdf" target="frmContent:index:listOperationJ:tbl"
 			fileName="List-Achat-agricole" />
 	</p:commandButton>
+
+
 
 
 
@@ -119,20 +126,20 @@
 
 					<h:outputText value="dateAchat" />
 					<h:outputText value="#{achatService.objectSelected.dateAchat}">
-						<f:convertDateTime pattern="yyyy-dd-MM" />
+						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
 
 
 
 					<h:outputText value="dateOperation" />
 					<h:outputText value="#{achatService.objectSelected.dateOperation}">
-						<f:convertDateTime pattern="yyyy-dd-MM" />
+						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
 
 
 					<h:outputText value="dateDePaiement" />
 					<h:outputText value="#{achatService.objectSelected.dateDePaiement}">
-						<f:convertDateTime pattern="yyyy-dd-MM" />
+						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
 
 

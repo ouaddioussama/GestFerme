@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet name="style.css" library="css" />
+</h:head>
+<h:body styleClass="Body">
+
+
+		<p:panel header="Ajout Information security " styleClass="text_normal"
+			style="width:100%">
+			<h:panelGrid columns="2" style="color:blue;width:100%"
+			id="addSecurity"
+				cellpadding="4">
+
+
+				<h:outputLabel value="nom de Client" />
+				<p:inputText style="width:80%"
+					value="#{securityService.objectToInsert.nom_client}" />
+
+
+
+				<p:outputLabel value="Date de debut periode" />
+				<p:calendar showOn="button" pattern="dd/MM/yyyy"
+					value="#{securityService.objectToInsert.date_debut}" />
+
+
+				<p:outputLabel value="Date de Fin periode" />
+				<p:calendar showOn="button" pattern="dd/MM/yyyy"
+					value="#{securityService.objectToInsert.date_fin}" />
+
+
+
+
+				<h:outputLabel value="mac adresse" />
+				<p:inputText style="width:80%"
+					value="#{securityService.objectToInsert.mac_adresse}" />
+
+				<h:outputLabel value="Active"   />
+				<p:selectOneMenu filter="true" style="width:60%"
+					value="#{securityService.objectToInsert.active}">
+
+					<f:selectItem itemValue="oui" itemLabel="Oui" />
+					<f:selectItem itemValue="non" itemLabel="Non" />
+
+
+				</p:selectOneMenu>
+
+
+
+
+			</h:panelGrid>
+		</p:panel>
+		<br></br>
+
+		<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
+			actionListener="#{securityService.create}"
+			update="growl1 frmContent:index:addSecurity 	frmContent:index:mdSecurity " />
+
+		
+</h:body>
+</html>

@@ -20,7 +20,7 @@
 		
 
 			<p:commandLink   update=":frmContent"
-				actionListener="#{HelpBean.go('/views/animaux/index_principale.xhtml')}">
+				actionListener="#{HelpBean.goRefresh('/views/animaux/index_principale')}">
 
 				<h:outputText value="Acceuil Achat/Ventes" style="color:blue;align:right" />
 
@@ -52,6 +52,18 @@
 				<ui:include src="List_Vente.xhtml" />
 
 			</p:tab>
+
+
+			<p:tab title="Les paiements d'aujourd'hui   ">
+				<ui:include src="List_Vente_today.xhtml" />
+			</p:tab>
+
+
+			<p:tab title="Les paiements de J+3   ">
+				<ui:include src="List_Vente_J+3.xhtml" />
+			</p:tab>
+
+
 
 
 

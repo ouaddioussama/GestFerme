@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +29,7 @@ import com.Enum.Types_Reglement;
 import com.Enum.Unite;
 import com.dao.interfaces.InterfProduitDao;
 import com.dao.interfaces.InterfVenteDao;
-import com.entities.Achat;
+import com.entities.Fich_Remb_Lait;
 import com.entities.Historique_Prod;
 import com.entities.Produit;
 import com.entities.Vente;
@@ -45,6 +46,13 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	protected Vente objectToInsert;
+
+	@Autowired
+	protected Fich_Remb_Lait objectTosearch;
+	/**
+	 * utilisé dans le calcul de la somme du montant depuis date debut vers date de
+	 * fin
+	 **/
 
 	@Autowired
 	protected InterfVenteDao dao;
@@ -92,6 +100,14 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 		this.listReglement = listReglement;
 	}
 
+	public Fich_Remb_Lait getObjectTosearch() {
+		return objectTosearch;
+	}
+
+	public void setObjectTosearch(Fich_Remb_Lait objectTosearch) {
+		this.objectTosearch = objectTosearch;
+	}
+
 	public void create() throws Exception {
 		System.out.println("inside create");
 
@@ -100,6 +116,10 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 			System.out.println("inside create");
 			objectToInsert.setDateOperation(new Date());
 			dao.createInstance(objectToInsert);
+
+			if (loginService.getEmployeetoLog() != null) {
+				objectToInsert.setUser_logged(loginService.getEmployeetoLog());
+			}
 
 			// ajout de la quantite actuelle au produit
 			Produit p = prodDao.findById(objectToInsert.getProduit().getId());
@@ -119,7 +139,7 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 				listObjects = (List<Vente>) dao.findAll();
 
 			}
-			Help.msg = "insÃ©rÃ© avec SuccÃ©s";
+			Help.msg = "insere avec Succes";
 			reset();
 
 		} else {
@@ -190,7 +210,7 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 		if (editedModele != null) {
 			dao.updateIstance(editedModele);
-			Help.msg = "mise Ã  jour faite avec SuccÃ¨s";
+			Help.msg = "mise e  jour faite avec Succes";
 
 		} else {
 			System.out.println("objectToInsert is null !");
@@ -203,7 +223,7 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 		if (c != null) {
 			dao.deleteInstance(c);
 			listObjects.remove(c);
-			Help.msg = "supprimÃ© avec SuccÃ¨s";
+			Help.msg = "supprime© avec Succes";
 
 		} else {
 			throw new Exception("objectSelected can not be null");
@@ -274,11 +294,14 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 	}
 
-	/** List Vente 
-	 * @throws ParseException **/
+	/**
+	 * List Vente
+	 * 
+	 * @throws ParseException
+	 **/
 	public List<Vente> getListVenteAgricoleD(int nbr) throws ParseException {
 
-		return getListVenteDate(nbr, Categorie.Animeaux_Achat);
+		return getListVenteDate(nbr, Categorie.Agricole_Vente);
 
 	}
 
@@ -290,19 +313,19 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 			// TODO: handle exception
 		}
 
-		return getListVenteDate(nbr,Categorie.Animeaux_Vente);
+		return getListVenteDate(nbr, Categorie.Animeaux_Vente);
 
 	}
 
 	public List<Vente> getListVenteAutoD(int nbr) throws ParseException {
 
-		return getListVenteDate(nbr,Categorie.Auto_Vente);
+		return getListVenteDate(nbr, Categorie.Auto_Vente);
 
 	}
 
 	public List<Vente> getListVenteAutreD(int nbr) throws ParseException {
 
-		return getListVenteDate(nbr,Categorie.Autre_Vente);
+		return getListVenteDate(nbr, Categorie.Autre_Vente);
 
 	}
 
@@ -311,7 +334,7 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 		return getListVente(Categorie.Lait);
 
 	}
-	
+
 	public void calclMontant() {
 		if (objectToInsert != null) {
 			objectToInsert.setMontant_global(objectToInsert.getPrix_unitaire() * objectToInsert.getQuantite());
@@ -344,10 +367,12 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 				//
 				listObjects.stream().forEach((p) -> {
-					existe_ref_achat = objectToInsert.getRef_bon_achat() == null ? false
-							: objectToInsert.getRef_bon_achat().intValue() == p.getRef_bon_achat().intValue() ? true
-									: false;
-					System.out.println("ref inside loop:" + p.getRef_bon_achat().intValue());
+					if (p.getRef_bon_achat() != null && objectToInsert.getRef_bon_achat() != null) {
+						existe_ref_achat = objectToInsert.getRef_bon_achat() == null ? false
+								: p.getRef_bon_achat().intValue() == objectToInsert.getRef_bon_achat().intValue() ? true
+										: false;
+						System.out.println("ref inside loop:" + p.getRef_bon_achat().intValue());
+					}
 					if (existe_ref_achat) {
 						throw new BreakException();
 					}
@@ -357,9 +382,9 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 				);
 
 			} catch (BreakException e) {
-				Help.error_msg = "reference d'achat dÃ©ja existant!" + "\n";
-				Help.error_msg2 = " Ø±Ù‚Ù… Ù�Ø§ØªÙˆØ±Ø© Ø§Ù„Ø´Ø±Ø§Ø¡ Ù…ÙˆØ¬ÙˆØ¯ Ù…Ø³Ø¨Ù‚Ø§Ù‹  Ù�ÙŠ Ù„Ø§Ø¦Ø­Ø© Ø§Ù„Ø´Ø±Ø§Ø¡";
-				objectToInsert.setRef_bon_achat(null);
+				Help.error_msg = "reference d'achat deja existant!" + "\n";
+				Help.error_msg2 = "هدا الرقم موجود مسبقا ";
+				objectToInsert.setRef_bon_achat(0);
 			}
 
 			catch (Exception e) {
@@ -396,8 +421,8 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 			} catch (BreakException e) {
 				Help.error_msg = "reference de vente deja existant!" + "\n";
-				Help.error_msg2 = " Ø±Ù‚Ù… Ù�Ø§ØªÙˆØ±Ø© Ø§Ù„Ø¨ÙŠØ¹  Ù…ÙˆØ¬ÙˆØ¯ Ù…Ø³Ø¨Ù‚Ø§Ù‹  Ù�ÙŠ Ù„Ø§Ø¦Ø­Ø© Ø§Ù„Ø¨ÙŠØ¹";
-				objectToInsert.setRef_bon_achat(null);
+				Help.error_msg2 = "هدا الرقم موجود مسبقا";
+				objectToInsert.setRef_bon_vente(0);
 			}
 
 			catch (Exception e) {
@@ -436,7 +461,7 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 		histoS.getListObjects().add(hp);
 
 	}
-	
+
 	// Recuperer la liste des achats selon type de produit
 	public List<Vente> getListVenteDate(int nbreDay, Categorie c) throws ParseException {
 		System.out.println("debut:" + new Date());
@@ -446,7 +471,7 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date currentD = sdf.parse(sdf.format(new Date()));
-		//listObjects = (List<Achat>) dao.findAll();
+		// listObjects = (List<Achat>) dao.findAll();
 		if (listObjects != null) {
 			try {
 				// System.out.println(currentD);
@@ -455,12 +480,13 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 				// listAchat.forEach(p -> System.out.println(p.getDateDePaiement()));
 
 				for (Vente a : listObjects) {
-					if (nbreDay ==1 && (sdf.parse(sdf.format(a.getDateDePaiement())).equals((currentD)))
+					if (nbreDay == 1 && a.getDateDePaiement() != null && a.getProduit() != null
+							&& (sdf.parse(sdf.format(a.getDateDePaiement())).equals((currentD)))
 							&& (a.getProduit().getCategorie() == c)) {
 						listAll.add(a);
-					} else if (nbreDay !=1
+					} else if (nbreDay != 1 && a.getDateDePaiement() != null && a.getProduit() != null
 							&& sdf.parse(sdf.format(a.getDateDePaiement())).after((addDays(currentD, 0)))
-							&& sdf.parse(sdf.format(a.getDateDePaiement())).before((addDays(currentD, nbreDay+1)))
+							&& sdf.parse(sdf.format(a.getDateDePaiement())).before((addDays(currentD, nbreDay + 1)))
 
 							&& (a.getProduit().getCategorie() == c)
 
@@ -480,11 +506,66 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 		return listAll;
 	}
-	
+
 	public Date addDays(Date date, int days) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.DATE, days); // minus number would decrement the days
 		return cal.getTime();
 	}
+
+	public void calculeMontantTotal() throws ParseException {
+		System.out.println("inside calculeMontantTotal !");
+
+		if (objectTosearch != null) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MMdd");
+			// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date currentD = sdf.parse(sdf.format(objectTosearch.getDate_debut()));
+			Date currentF = sdf.parse(sdf.format(objectTosearch.getDate_fin()));
+
+			String strDateD = sdf.format(objectTosearch.getDate_debut());
+			String strDateF = sdf.format(objectTosearch.getDate_fin());
+
+			System.out.println(currentD + " " + currentF);
+			System.out.println(currentD + " " + currentF);
+
+			System.out.println(strDateD + " " + strDateD);
+			System.out.println(strDateF + " " + strDateF);
+
+			Date result = currentF.after(currentD) ? currentF : currentD;
+			System.out.println(" top date is :" + result);
+
+			Date k = sdf.parse(strDateD);
+			System.out.println(k);
+
+			/** traitement special de la recherche **/
+
+		}
+
+	} 
+
+	public List<Vente> getlistVenteLaitDateSearch()
+
+	{
+		if (objectTosearch != null && objectTosearch.getDate_debut() != null && objectTosearch.getDate_fin() != null) {
+			return getlistVenteByDateSearch(Categorie.Lait, objectTosearch.getDate_debut(),
+					objectTosearch.getDate_fin());
+
+		}
+
+		return Collections.emptyList();
+
+	}
+
+	public List<Vente> getlistVenteByDateSearch(Categorie c, Date dateInf, Date dateSup) {
+		List<Vente> listAll = new ArrayList<Vente>();
+		listAll = listObjects.stream().filter((p) -> (p.getProduit() != null && p.getProduit().getCategorie() == c
+				&& p.getDateDePaiement().after(addDays(dateInf, -1)) && p.getDateDePaiement().before((addDays(dateSup, 1))))
+
+		).collect(Collectors.toList());
+
+		return listAll;
+	}
+
 }

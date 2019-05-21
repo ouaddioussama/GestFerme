@@ -59,7 +59,7 @@ public class ProduitService extends ObjectService<Produit> implements Serializab
 			} catch (Exception e) {
 				listObjects = (List<Produit>) dao.findAll();
 			}
-			Help.msg = "inséré avec Succés";
+			Help.msg = "insere avec Succes";
 			reset();
 
 		} else {
@@ -111,7 +111,7 @@ public class ProduitService extends ObjectService<Produit> implements Serializab
 
 	  /** Les autres **/
 	public void createProdAutreAchat() throws Exception {
-		objectToInsert.setCategorie(Categorie.Auto_Achat);
+		objectToInsert.setCategorie(Categorie.Autre_Achat);
 		create();
 	}
 	
@@ -149,7 +149,7 @@ public class ProduitService extends ObjectService<Produit> implements Serializab
 
 		if (editedModele != null) {
 			dao.updateIstance(editedModele);
-			Help.msg = "mise à jour faite avec Succès";
+			Help.msg = "mise a jour faite avec Succes";
 
 		} else {
 			System.out.println("objectToInsert is null !");
@@ -162,7 +162,7 @@ public class ProduitService extends ObjectService<Produit> implements Serializab
 		if (c != null) {
 			dao.deleteInstance(c);
 			listObjects.remove(c);
-			Help.msg = "supprimé avec Succès";
+			Help.msg = "supprime avec Succes";
 
 		} else {
 			throw new Exception("objectSelected can not be null");

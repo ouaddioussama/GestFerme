@@ -12,17 +12,26 @@
 </h:head>
 
 <h:body>
+
+
+	<p:commandButton value="Rapport Pdf" ajax="false">
+		<p:dataExporter type="pdf" target="frmContent:index:listOperation:tabSalaire"
+			fileName="List-Employées" />
+	</p:commandButton>
+
+
+
 	<h:form id="listOperation">
 
 		<p:growl id="growl" life="1000" showDetail="true" />
 
-		<p:panel header="Listes Vente Prod /قائمة المبيعات  ">
+		<p:panel header="Listes Fiche Salaire /قائمة معلومات الأجرة  ">
 			<p:separator></p:separator>
 
 
 			<p:dataTable value="#{ficheSalaireService.listObjects}" var="t"
 				rows="10" selectionMode="single" rowKey="#{t.id}"
-				id="tabSalaire"
+				id="tabSalaire" 
 				selection="#{ficheSalaireService.objectSelected}" rowIndexVar="rowIndex"
 				paginator="false"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

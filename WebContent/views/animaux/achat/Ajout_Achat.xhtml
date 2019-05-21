@@ -38,7 +38,7 @@
 			<p:inputText style="width:80%" id="ref_bon_achat"
 				value="#{achatService.objectToInsert.ref_bon_achat}">
 				<p:ajax event="blur" update="growl1  frmContent:index:ref_bon_achat"
-					listener="#{achatService.verifRefAchat}" />
+					listener="#{achatService.verifRefAchatAnimaux}" />
 			</p:inputText>
 			<h:outputLabel value="رقم فاتورة الشراء" />
 
@@ -135,7 +135,8 @@
 	<br></br>
 
 	<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
-		update="growl1 frmContent:index:addPanel frmContent:index:listOperation"
+		update="growl1 frmContent:index:addPanel frmContent:index:listOperation	
+		frmContent:index:listOperationD frmContent:index:listOperationJ"
 		action="#{achatService.create}" />
 
 

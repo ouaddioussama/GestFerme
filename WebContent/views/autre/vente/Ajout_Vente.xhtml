@@ -19,7 +19,7 @@
 
 
 	<p:panel
-		header="Ajout Information Produit /إضافة معلومات منتوجات  المواشي "
+		header="Ajout Information Produit /إضافة معلومات منتوجات المبيعات   "
 		styleClass="text_normal" style="width:100%">
 		<h:panelGrid columns="3" id="addPanel" style="color:blue;width:100%"
 			cellpadding="4">
@@ -28,19 +28,28 @@
 			<p:selectOneMenu filter="true" style="width:60%" id="selectmenu"
 				value="#{venteService.objectToInsert.produit}"
 				converter="#{produitConverter}">
-				<f:selectItems value="#{produitService.listProduitAgricoleVente}"
+				<f:selectItems value="#{produitService.listProduitAutreVente}"
 					var="d" itemValue="#{d}" itemLabel="#{d.designation_prod}" />
 			</p:selectOneMenu>
 			<h:outputLabel value="المنتوج" />
 
 
 			<h:outputLabel value="Ref_bon_achat *" />
-			<p:inputText style="width:80%" id="ref_bon_achat" 
+			<p:inputText style="width:80%" id="ref_bon_achat"
 				value="#{venteService.objectToInsert.ref_bon_achat}">
 				<p:ajax event="blur" update="growl1  frmContent:index:ref_bon_achat"
 					listener="#{venteService.verifRefAchat}" />
 			</p:inputText>
 			<h:outputLabel value="رقم فاتورة الشراء" />
+
+			<h:outputLabel value="Ref_bon_vente *" />
+			<p:inputText style="width:80%" id="ref_bon_vente"
+				value="#{venteService.objectToInsert.ref_bon_vente}">
+				<p:ajax event="blur" update="growl1  frmContent:index:ref_bon_vente"
+					listener="#{venteService.verifRefVente}" />
+			</p:inputText>
+			<h:outputLabel value="رقم فاتورة البيع" />
+
 
 
 			<h:outputLabel value="client" />
@@ -115,14 +124,14 @@
 
 
 			<p:outputLabel value="Date Achat" />
-			<p:calendar id="calend" showOn="button" pattern="MM/dd/yyyy"
+			<p:calendar id="calend" showOn="button" pattern="dd/MM/yyyy"
 				value="#{venteService.objectToInsert.dateAchat}" />
 			<p:outputLabel value="تاريخ الشراء" />
 
 
 
 			<p:outputLabel value="Date de paiement/echance" />
-			<p:calendar showOn="button" pattern="MM/dd/yyyy"
+			<p:calendar showOn="button" pattern="dd/MM/yyyy"
 				value="#{venteService.objectToInsert.dateDePaiement}" />
 			<p:outputLabel value="تاريخ الدفع" />
 
@@ -135,7 +144,8 @@
 	<br></br>
 
 	<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
-		update="growl1 frmContent:index:addPanel frmContent:index:listOperation"
+		update="growl1 frmContent:index:addPanel frmContent:index:listOperation frmContent:index:mdProd
+		frmContent:index:listOperationD frmContent:index:listOperationJ"
 		action="#{venteService.create}" />
 
 

@@ -27,6 +27,7 @@
 		<mapping class="com.entities.Fiche_Personnel" />
 		<mapping class="com.entities.Fich_Remb_Lait" />
 		<mapping class="com.entities.Historique_Prod" />
+		<mapping class="com.entities.Security" />
 
 
 	</session-factory>

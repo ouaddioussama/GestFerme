@@ -12,6 +12,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -187,4 +188,13 @@ public class Help {
 	        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 	        return "/login.xhtml?faces-redirect=true";
 	    }
+	 
+		public void reload() throws IOException {
+			/*
+		    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+		    ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+		    */
+			goTo("/views/index");
+
+		} 
 }

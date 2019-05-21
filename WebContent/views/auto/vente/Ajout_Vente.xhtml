@@ -19,7 +19,7 @@
 
 
 	<p:panel
-		header="Ajout Information Produit /إضافة معلومات منتوجات  المواشي "
+		header="Ajout Information Produit /إضافة معلومات منتوجات  النقل "
 		styleClass="text_normal" style="width:100%">
 		<h:panelGrid columns="3" id="addPanel" style="color:blue;width:100%"
 			cellpadding="4">
@@ -135,7 +135,8 @@
 	<br></br>
 
 	<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
-		update="growl1 frmContent:index:addPanel frmContent:index:listOperation"
+		update="growl1 frmContent:index:addPanel frmContent:index:listOperation
+		frmContent:index:listOperationD frmContent:index:listOperationJ"
 		action="#{venteService.create}" />
 
 

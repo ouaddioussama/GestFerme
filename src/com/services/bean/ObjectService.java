@@ -18,18 +18,20 @@ import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import com.dao.interfaces.InterfDao;
+import com.entities.Achat;
 
 @ManagedBean(name = "ObjectBean")
 @ViewScoped
-public class ObjectService<T> implements Serializable {
+public class ObjectService<T> extends LazyDataModel<T> implements Serializable {
 
 	private Class<T> classG;
 
 	protected T objectToInsert;
 	protected T objectSelected;
-	protected InterfDao<T> daoObject;
+	protected InterfDao<T> daoObject; 
 
 	protected List<T> listObjects;
+	private List<Achat> filtered;
 	protected List<T> listObjects_filtered = new ArrayList<T>();
 	protected String indice_path = "";
 	protected String path = "/views/" + indice_path + "/index";
@@ -87,6 +89,16 @@ public class ObjectService<T> implements Serializable {
 	public void setListObjects_filtered(List<T> listObjects_filtered) {
 		this.listObjects_filtered = listObjects_filtered;
 	}
+	
+	
+
+	public List<Achat> getFiltered() {
+		return filtered;
+	}
+
+	public void setFiltered(List<Achat> filtered) {
+		this.filtered = filtered;
+	}
 
 	@PostConstruct
 	public void init() {
@@ -120,7 +132,7 @@ public class ObjectService<T> implements Serializable {
 		if (objectToInsert != null) {
 			/*
 			 * System.out.println("inside create"); dao.createInstance(objectToInsert);
-			 * listObjects.add(objectToInsert); Help.msg = "inséré avec Succés";
+			 * listObjects.add(objectToInsert); Help.msg = "insï¿½rï¿½ avec Succï¿½s";
 			 * Help.goTo(path); objectToInsert=null;
 			 */
 
@@ -138,7 +150,7 @@ public class ObjectService<T> implements Serializable {
 		if (objectSelected != null) {
 			daoObject.deleteInstance(objectSelected);
 			listObjects.remove(objectSelected);
-			Help.msg = "supprimé avec Succès";
+			Help.msg = "supprimï¿½ avec Succï¿½s";
 			Help.goTo(path);
 
 		} else {
@@ -153,7 +165,7 @@ public class ObjectService<T> implements Serializable {
 		if (editedModele != null) {
 			daoObject.updateIstance(editedModele);
 			RequestContext requestContext = RequestContext.getCurrentInstance();
-			Help.msg = "mise à jour faite avec Succès";
+			Help.msg = "mise ï¿½ jour faite avec Succï¿½s";
 			// Help.goTo(path);
 
 		} else {
@@ -169,7 +181,7 @@ public class ObjectService<T> implements Serializable {
 	 * public void onRowSelect(SelectEvent event) throws IOException {
 	 * 
 	 * Client editedModele = (Client) event.getObject();
-	 * Help.msg="Client : "+editedModele.getNom_client()+"selectionée";
+	 * Help.msg="Client : "+editedModele.getNom_client()+"selectionï¿½e";
 	 * anotherDisplay(); System.out.println(editedModele.getNom_client());
 	 * 
 	 * 

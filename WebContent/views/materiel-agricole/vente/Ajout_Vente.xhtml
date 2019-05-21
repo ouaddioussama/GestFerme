@@ -19,7 +19,7 @@
 
 
 	<p:panel
-		header="Ajout Information Produit /إضافة معلومات منتوجات  المواشي "
+		header="Ajout Information Produit /إضافة معلومات منتوجات   المواد الفلاحية "
 		styleClass="text_normal" style="width:100%">
 		<h:panelGrid columns="3" id="addPanel" style="color:blue;width:100%"
 			cellpadding="4">
@@ -123,14 +123,14 @@
 
 
 			<p:outputLabel value="Date Achat" />
-			<p:calendar id="calend" showOn="button" pattern="MM/dd/yyyy"
+			<p:calendar id="calend" showOn="button" pattern="dd/MM/yyyy"
 				value="#{venteService.objectToInsert.dateAchat}" />
 			<p:outputLabel value="تاريخ الشراء" />
 
 
 
 			<p:outputLabel value="Date de paiement/echance" />
-			<p:calendar showOn="button" pattern="MM/dd/yyyy"
+			<p:calendar showOn="button" pattern="dd/MM/yyyy"
 				value="#{venteService.objectToInsert.dateDePaiement}" />
 			<p:outputLabel value="تاريخ الدفع" />
 
@@ -143,7 +143,9 @@
 	<br></br>
 
 	<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
-		update="growl1 frmContent:index:addPanel frmContent:index:listOperation"
+		update="growl1 frmContent:index:addPanel frmContent:index:listOperation
+		frmContent:index:listOperationD frmContent:index:listOperationJ
+		frmContent:index:mdProd frmContent:index:listProd"
 		action="#{venteService.create}" />
 
 

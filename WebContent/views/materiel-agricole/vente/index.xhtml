@@ -38,11 +38,15 @@
 			</p:tab>
 
 
-			<p:tab title="List Produit /قائمة المنتوجات    ">
+			<p:tab title="Modif Produit /تغيير معلومات المنتوج    ">
 				<ui:include src="m_d_Produit.xhtml" />
 
 			</p:tab>
+			
+			<p:tab title="List Produit /قائمة المنتوجات    ">
+				<ui:include src="list_Produit.xhtml" />
 
+			</p:tab>
 			<p:tab title="Ajout des ventes /إضافة المبيعات    ">
 				<ui:include src="Ajout_Vente.xhtml" />
 
@@ -53,13 +57,15 @@
 
 			</p:tab>
 
-			<p:tab title="Les paiements de J-3   ">
-			</p:tab>
-
 
 			<p:tab title="Les paiements d'aujourd'hui   ">
+				<ui:include src="List_Vente_today.xhtml" />
 			</p:tab>
 
+
+			<p:tab title="Les paiements de J+3   ">
+				<ui:include src="List_Vente_J+3.xhtml" />
+			</p:tab>
 
 
 

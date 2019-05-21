@@ -106,6 +106,22 @@
 
 				</p:panel>
 
+
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+						<div style="white-space: pre-wrap">
+							<h:outputText value="Autre / مواد أخرى" />
+						</div>
+
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/autre/index_principale.xhtml')}">
+							<p:graphicImage value="/resources/images/autre.jpg" />
+						</p:commandLink>
+					</h:panelGrid>
+
+				</p:panel>
+
+
 				<p:panel style="text-align:center;">
 					<h:panelGrid columns="2" layout="grid">
 						<div style="white-space: pre-wrap">
@@ -139,20 +155,25 @@
 				</p:panel>
 
 
-
 				<p:panel style="text-align:center;">
 					<h:panelGrid columns="2" layout="grid">
+
 						<div style="white-space: pre-wrap">
-							<h:outputText value="Autre / مواد أخرى" />
+							<h:outputText value="tableau de bord" />
 						</div>
 
+
+
 						<p:commandLink update=":frmContent"
-							actionListener="#{HelpBean.go('/views/autre/index_principale.xhtml')}">
-							<p:graphicImage value="/resources/images/autre.jpg" />
+							actionListener="#{HelpBean.go('/views/TabBord/index_principale.xhtml')}">
+
+							<p:graphicImage value="/resources/images/tableau-bord.jpg" />
+
 						</p:commandLink>
 					</h:panelGrid>
 
 				</p:panel>
+
 
 
 			</h:panelGrid>

@@ -9,6 +9,7 @@
 
 	<h:form>
 
+
 		<h:panelGrid columns="10" cellpadding="10"
 			style="background:#88b6d8;width:100%">
 
@@ -40,8 +41,8 @@
               Acceuil
 
 			</p:commandLink>
-			<p:commandLink style="color:blue;align:right" ajax="true"
-			action="#{HelpBean.logout}">
+			<p:commandLink style="color:blue;align:right" 
+			action="#{loginService.logOut}">
 		   Deconnexion
 		</p:commandLink>
 
