@@ -42,7 +42,7 @@
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,100,200">
 
-				<p:ajax event="rowSelect" oncomplete="PF('achatDialogD').show()"
+				<p:ajax event="rowSelect" oncomplete="PF('achatDialogDT').show()"
 					listener="#{achatService.onRowSelect}"
 					update="frmContent:index:listOperationD1:carDetailD" />
 
@@ -91,7 +91,7 @@
 
 
 		<p:dialog header="Achat Info/معلومات الشراء  الخاصة  بالمواد الفلاحية"
-			widgetVar="achatDialogD" modal="false" resizable="false">
+			widgetVar="achatDialogDT" modal="false" resizable="false">
 			<p:outputPanel id="carDetailD" style="text-align:center;">
 				<p:panelGrid columns="2" columnClasses="label,value">
 

@@ -59,7 +59,7 @@ public class FournisseurService extends ObjectService<Fournisseur> implements Se
 				listObjects = (List<Fournisseur>) dao.findAll();
 
 			}
-			Help.msg = "inséré avec Succés";
+			Help.msg = "insere avec Succes";
 			reset();
 
 		} else {
@@ -99,7 +99,7 @@ public class FournisseurService extends ObjectService<Fournisseur> implements Se
 
 		if (editedModele != null) {
 			dao.updateIstance(editedModele);
-			Help.msg = "mise à jour faite avec Succès";
+			Help.msg = "mise e jour faite avec Succes";
 
 		} else {
 			System.out.println("objectToInsert is null !");
@@ -112,7 +112,7 @@ public class FournisseurService extends ObjectService<Fournisseur> implements Se
 		if (c != null) {
 			dao.deleteInstance(c);
 			listObjects.remove(c);
-			Help.msg = "supprimé avec Succès";
+			Help.msg = "supprime avec Succes";
 
 		} else {
 			throw new Exception("objectSelected can not be null");

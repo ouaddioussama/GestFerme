@@ -40,14 +40,14 @@
 				<p:ajax event="blur" update="growl1  frmContent:index:ref_bon_achat"
 					listener="#{venteService.verifRefAchat}" />
 			</p:inputText>
-			<h:outputLabel value="رقم فاتورة الشراء" />
+			<h:outputLabel value="رقم فاتورة البيع " />
 
 
 			<h:outputLabel value="Ref_bon_vente *" />
 			<p:inputText style="width:80%" id="ref_bon_vente" 
 				value="#{venteService.objectToInsert.ref_bon_vente}">
 				<p:ajax event="blur" update="growl1  frmContent:index:ref_bon_vente"
-					listener="#{venteService.verifRefVente}" />
+					listener="#{venteService.verifRefVenteAgricole}" />
 			</p:inputText>
 			<h:outputLabel value="رقم فاتورة البيع" />
 
@@ -103,7 +103,7 @@
 				<f:selectItems value="#{employeeService.respoAchat}" var="d"
 					itemValue="#{d}" itemLabel="#{d.nom}" />
 			</p:selectOneMenu>
-			<h:outputLabel value="المسؤول عن الشراء" />
+			<h:outputLabel value="المسؤول عن البيع " />
 
 			<h:outputLabel value="mode_de_paiement" styleClass="text_normal" />
 			<p:selectOneMenu filter="true" style="width:60%"
@@ -116,16 +116,16 @@
 
 
 
-			<h:outputLabel value="Designation d'achat" />
+			<h:outputLabel value="Designation de vente" />
 			<p:inputText style="width:80%"
 				value="#{venteService.objectToInsert.designation_achat}" />
-			<h:outputLabel value="معلومات اخرى تخص الشراء" />
+			<h:outputLabel value="معلومات اخرى تخص البيع " />
 
 
-			<p:outputLabel value="Date Achat" />
+			<p:outputLabel value="Date Vente" />
 			<p:calendar id="calend" showOn="button" pattern="dd/MM/yyyy"
 				value="#{venteService.objectToInsert.dateAchat}" />
-			<p:outputLabel value="تاريخ الشراء" />
+			<p:outputLabel value="تاريخ البيع " />
 
 
 

@@ -59,8 +59,8 @@
 
 
 			<p:dataTable value="#{venteService.getlistVenteLaitDateSearch()}"
-				var="t" rows="10" selectionMode="single" rowKey="#{t.id}"
-				selection="#{venteService.objectSelected}" rowIndexVar="rowIndex"
+				var="t" rows=""  rowKey="#{t.id}"
+				rowIndexVar="rowIndex"
 				paginator="false" id="tbl"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,100,200">

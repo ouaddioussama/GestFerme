@@ -49,6 +49,9 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 	@Autowired
 	protected Fich_Remb_Lait objectTosearch;
+	
+	boolean existe = false;
+
 	/**
 	 * utilisé dans le calcul de la somme du montant depuis date debut vers date de
 	 * fin
@@ -431,6 +434,66 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 		}
 
+	}
+	
+	// Recuperer la liste des achats selon type de produit
+	public void verifRefVente(Categorie c) throws BreakException {
+		System.out.println("inside verifRefAchat");
+		System.out.println("ref Bon:" + objectToInsert.getRef_bon_achat());
+		if (listObjects != null && objectToInsert != null) {
+			try {
+
+				//
+				listObjects.stream().filter(f -> f.getProduit().getCategorie() == c
+					&&	f.getRef_bon_vente()!=null).forEach((p) -> {
+					existe = objectToInsert.getRef_bon_vente() == null ? false
+							: objectToInsert.getRef_bon_vente().intValue() == p.getRef_bon_vente().intValue() ? true
+									: false;
+					System.out.println("ref inside loop:" + p.getRef_bon_vente().intValue());
+					if (existe) {
+						throw new BreakException();
+					}
+
+				}
+
+				);
+
+			} catch (BreakException e) {
+				Help.error_msg = "reference de vente deja existant!" + "\n";
+				Help.error_msg2 = "هدا الرقم موجود مسبقاً";
+				objectToInsert.setRef_bon_vente(0);
+			}
+
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+	
+	public void verifRefVenteAgricole() throws BreakException {
+		verifRefVente(Categorie.Agricole_Vente);
+
+	}
+
+	public void verifRefVenteAnimaux() throws BreakException {
+		verifRefVente(Categorie.Animeaux_Vente);
+
+	}
+
+	public void verifRefVenteLait() throws BreakException {
+		verifRefVente(Categorie.Lait);
+
+	}
+
+	public void verifRefVenteTransport() throws BreakException {
+		verifRefVente(Categorie.Auto_Vente);
+
+	}
+
+	public void verifRefVenteAutre() throws BreakException {
+		verifRefVente(Categorie.Autre_Vente);
 	}
 
 	public void updateFiche() {

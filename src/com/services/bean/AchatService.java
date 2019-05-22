@@ -413,9 +413,10 @@ public class AchatService extends ObjectService<Achat> implements Serializable,S
 		System.out.println("ref Bon:" + objectToInsert.getRef_bon_achat());
 		if (listObjects != null && objectToInsert != null) {
 			try {
-
+                   System.out.println(listObjects.size());
 				//
 				listObjects.stream().filter(f -> f.getProduit().getCategorie() == c).forEach((p) -> {
+					System.out.println(p.getRef_bon_achat().intValue());
 					existe = objectToInsert.getRef_bon_achat() == null ? false
 							: objectToInsert.getRef_bon_achat().intValue() == p.getRef_bon_achat().intValue() ? true
 									: false;

@@ -64,7 +64,30 @@
 
 				<p:column headerText="active" style="text-align: left; "
 					filterBy="#{t.active}">
-					<h:outputText value="#{t.active}" />
+
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.active}" />
+						</f:facet>
+						<f:facet name="input">
+
+							<p:selectOneMenu filter="true" style="width:60%"
+								value="#{t.active}">
+
+								<f:selectItem itemValue="oui" itemLabel="Oui" />
+								<f:selectItem itemValue="non" itemLabel="Non" />
+								<f:selectItem itemValue="sans-internet" itemLabel="sans-internet" />
+
+
+							</p:selectOneMenu>
+
+						</f:facet>
+					</p:cellEditor>
+
+
+
+
 
 				</p:column>
 

@@ -32,7 +32,7 @@
 
 		<p:growl id="growl" life="1000" showDetail="true" />
 
-		<p:panel header="Listes Achat Auto /قائمة المشتريات النقل  " id="pnle">
+		<p:panel header="Listes Achat Auto /قائمة المشتريات الأخرى  " id="pnle">
 			<p:separator></p:separator>
 
 			<p:dataTable value="#{achatService.getListAchatAutreD(1)}" var="t"
@@ -90,7 +90,7 @@
 
 
 
-		<p:dialog header="Achat Info/معلومات الشراء  الخاصة  بالمواد الفلاحية"
+		<p:dialog header="Achat Info/معلومات الشراء "
 			widgetVar="achatDialogD" modal="false" resizable="false">
 			<p:outputPanel id="achatDialogL" style="text-align:center;">
 				<p:panelGrid columns="2" columnClasses="label,value">

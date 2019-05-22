@@ -28,7 +28,7 @@
 			<p:selectOneMenu filter="true" style="width:60%" id="selectmenu"
 				value="#{achatService.objectToInsert.produit}"
 				converter="#{produitConverter}">
-				<f:selectItems value="#{produitService.listProduitAnimeauxAchat}"
+				<f:selectItems value="#{produitService.listProduitAutoAchat}"
 					var="d" itemValue="#{d}" itemLabel="#{d.designation_prod}" />
 			</p:selectOneMenu>
 			<h:outputLabel value="المنتوج" />
@@ -38,9 +38,20 @@
 			<p:inputText style="width:80%" id="ref_bon_achat"
 				value="#{achatService.objectToInsert.ref_bon_achat}">
 				<p:ajax event="blur" update="growl1  frmContent:index:ref_bon_achat"
-					listener="#{achatService.verifRefAchat}" />
+					listener="#{achatService.verifRefAchatTransport}" />
 			</p:inputText>
 			<h:outputLabel value="رقم فاتورة الشراء" />
+
+
+			<h:outputLabel value="Fournisseur" />
+			<p:selectOneMenu filter="true" style="width:60%"
+				value="#{achatService.objectToInsert.fournisseur}"
+				converter="#{fournisseurConverter}">
+				<f:selectItems value="#{FournisseurService.listObjects}" var="d"
+					itemValue="#{d}" itemLabel="#{d.nom}" />
+			</p:selectOneMenu>
+			<h:outputLabel value="المزود" />
+
 
 
 
@@ -98,14 +109,14 @@
 
 
 			<p:outputLabel value="Date Achat" />
-			<p:calendar id="calend" showOn="button" pattern="MM/dd/yyyy"
+			<p:calendar id="calend" showOn="button" pattern="dd/MM/dd/yyyy"
 				value="#{achatService.objectToInsert.dateAchat}" />
 			<p:outputLabel value="تاريخ الشراء" />
 
 
 
 			<p:outputLabel value="Date de paiement/echance" />
-			<p:calendar showOn="button" pattern="MM/dd/yyyy"
+			<p:calendar showOn="button" pattern="dd/MM/dd/yyyy"
 				value="#{achatService.objectToInsert.dateDePaiement}" />
 			<p:outputLabel value="تاريخ الدفع" />
 

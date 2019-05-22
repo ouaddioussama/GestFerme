@@ -132,7 +132,7 @@ public class ObjectService<T> extends LazyDataModel<T> implements Serializable {
 		if (objectToInsert != null) {
 			/*
 			 * System.out.println("inside create"); dao.createInstance(objectToInsert);
-			 * listObjects.add(objectToInsert); Help.msg = "ins�r� avec Succ�s";
+			 * listObjects.add(objectToInsert); Help.msg = "insere avec Succes";
 			 * Help.goTo(path); objectToInsert=null;
 			 */
 
@@ -150,7 +150,7 @@ public class ObjectService<T> extends LazyDataModel<T> implements Serializable {
 		if (objectSelected != null) {
 			daoObject.deleteInstance(objectSelected);
 			listObjects.remove(objectSelected);
-			Help.msg = "supprim� avec Succ�s";
+			Help.msg = "supprime avec Succes";
 			Help.goTo(path);
 
 		} else {
@@ -165,7 +165,7 @@ public class ObjectService<T> extends LazyDataModel<T> implements Serializable {
 		if (editedModele != null) {
 			daoObject.updateIstance(editedModele);
 			RequestContext requestContext = RequestContext.getCurrentInstance();
-			Help.msg = "mise � jour faite avec Succ�s";
+			Help.msg = "mise e jour faite avec Succes";
 			// Help.goTo(path);
 
 		} else {
@@ -181,7 +181,7 @@ public class ObjectService<T> extends LazyDataModel<T> implements Serializable {
 	 * public void onRowSelect(SelectEvent event) throws IOException {
 	 * 
 	 * Client editedModele = (Client) event.getObject();
-	 * Help.msg="Client : "+editedModele.getNom_client()+"selection�e";
+	 * Help.msg="Client : "+editedModele.getNom_client()+"selectionee";
 	 * anotherDisplay(); System.out.println(editedModele.getNom_client());
 	 * 
 	 * 

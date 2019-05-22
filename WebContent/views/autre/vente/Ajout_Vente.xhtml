@@ -46,7 +46,7 @@
 			<p:inputText style="width:80%" id="ref_bon_vente"
 				value="#{venteService.objectToInsert.ref_bon_vente}">
 				<p:ajax event="blur" update="growl1  frmContent:index:ref_bon_vente"
-					listener="#{venteService.verifRefVente}" />
+					listener="#{venteService.verifRefVenteAutre}" />
 			</p:inputText>
 			<h:outputLabel value="رقم فاتورة البيع" />
 

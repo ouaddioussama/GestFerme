@@ -57,7 +57,7 @@ public class FicheSalaireService extends ObjectService<Fiche_Personnel> implemen
 			} catch (Exception e) {
 				listObjects = (List<Fiche_Personnel>) dao.findAll();
 			}
-			Help.msg = "inséré avec Succés";
+			Help.msg = "insere avec Succes";
 			reset();
 
 		} else {
@@ -90,7 +90,7 @@ public class FicheSalaireService extends ObjectService<Fiche_Personnel> implemen
 
 		if (editedModele != null) {
 			dao.updateIstance(editedModele);
-			Help.msg = "mise à jour faite avec Succès";
+			Help.msg = "mise e jour faite avec Succes";
 
 		} else {
 			System.out.println("objectToInsert is null !");
@@ -103,7 +103,7 @@ public class FicheSalaireService extends ObjectService<Fiche_Personnel> implemen
 		if (c != null) {
 			dao.deleteInstance(c);
 			listObjects.remove(c);
-			Help.msg = "supprimé avec Succès";
+			Help.msg = "supprime avec Succes";
 
 		} else {
 			throw new Exception("objectSelected can not be null");

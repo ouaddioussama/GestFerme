@@ -51,6 +51,22 @@
 				</p:column>
 
 
+
+				<p:column headerText="Mot de passe :/ كلمة السر" style="text-align: left; "
+					filterBy="#{t.nom}">
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.pass_word}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.pass_word}" style="width:96%" label="Nom" />
+
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
 				<p:column headerText="Profil / الوظيفة" style="text-align: left; "
 					filterBy="#{t.profil}">
 					<h:outputText value="#{t.profil}" />

@@ -97,7 +97,7 @@ public class EmployeeService extends ObjectService<Employee> implements Serializ
 				   listObjects = (List<Employee>) dao.findAll();
 
 			}
-			 Help.msg = "inséré avec Succés";
+			 Help.msg = "insere avec Succes";
 			 reset();
 
 		}
@@ -137,7 +137,7 @@ public class EmployeeService extends ObjectService<Employee> implements Serializ
 
 		if(editedModele !=null) {
 			 dao.updateIstance(editedModele);
-			 Help.msg = "mise à jour faite avec Succès";
+			 Help.msg = "mise a jour faite avec Succes";
 			
 		}else {
 			System.out.println("objectToInsert is null !");
@@ -151,7 +151,7 @@ public class EmployeeService extends ObjectService<Employee> implements Serializ
 		if(c !=null) {
 			 dao.deleteInstance(c);
 			 listObjects.remove(c);
-			 Help.msg = "supprimé avec Succès";
+			 Help.msg = "supprime avec Succes";
 
 			
 		}else {
@@ -160,7 +160,7 @@ public class EmployeeService extends ObjectService<Employee> implements Serializ
 	}
 	
 
-	// Recuperer la liste des employées selon type de profil
+	// Recuperer la liste des employï¿½es selon type de profil
 	public List<Employee> getListResponsable(Profil c) {
 		List<Employee> listRespo = null;
 		if (listObjects != null) {

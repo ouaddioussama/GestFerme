@@ -70,7 +70,7 @@ public class FicheLaitService extends ObjectService<Fich_Remb_Lait> implements S
 			} catch (Exception e) {
 				   listObjects = (List<Fich_Remb_Lait>) dao.findAll();
 			}
-			 Help.msg = "inséré avec Succés";
+			 Help.msg = "insere avec Succes";
 			 reset();
 
 		}
@@ -104,7 +104,7 @@ public class FicheLaitService extends ObjectService<Fich_Remb_Lait> implements S
 
 		if(editedModele !=null) {
 			 dao.updateIstance(editedModele);
-			 Help.msg = "mise à jour faite avec Succès";
+			 Help.msg = "mise e jour faite avec Succes";
 			
 		}else {
 			System.out.println("objectToInsert is null !");
@@ -118,7 +118,7 @@ public class FicheLaitService extends ObjectService<Fich_Remb_Lait> implements S
 		if(c !=null) {
 			 dao.deleteInstance(c);
 			 listObjects.remove(c);
-			 Help.msg = "supprimé avec Succès";
+			 Help.msg = "supprime avec Succes";
 
 			
 		}else {

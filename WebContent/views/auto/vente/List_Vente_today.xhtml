@@ -30,7 +30,7 @@
 		<p:panel header="Listes vente auto /قائمة المبيعات بالنقل  " id="pnl">
 			<p:separator></p:separator>
 
-			<p:dataTable value="#{venteService.getListVenteAutreD(1)}" var="t"
+			<p:dataTable value="#{venteService.getListVenteAutoD(1)}" var="t"
 				rows="" selectionMode="single" rowKey="#{t.id}"
 				selection="#{venteService.objectSelected}" rowIndexVar="rowIndex"
 				paginator="false" id="tblD" filteredValue="#{venteService.filtered}"
@@ -85,7 +85,7 @@
 
 
 
-		<p:dialog header="Achat Info/معلومات المبيعات  الخاصة  بالمواد الفلاحية"
+		<p:dialog header="Achat Info/معلومات المبيعات  الخاصة  بالنقل"
 			widgetVar="achatDialogD" modal="false" resizable="false">
 			<p:outputPanel id="carDetailD" style="text-align:center;">
 				<p:panelGrid columns="2" columnClasses="label,value">

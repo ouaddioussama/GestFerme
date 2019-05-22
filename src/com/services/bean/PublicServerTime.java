@@ -32,10 +32,13 @@ public final class PublicServerTime {
             }
             catch (IOException e) {
                 e.printStackTrace();
+                return null;
             }
         }
+         if(client!=null) {
+             client.close();
 
-        client.close();
+         }
 
         return null;
 

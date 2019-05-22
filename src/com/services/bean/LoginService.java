@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.Enum.Profil;
 import com.dao.interfaces.InterfEmployeeDao;
 import com.entities.Employee;
+import com.entities.Security;
 
 @ManagedBean(name = "loginService")
 @SessionScoped
@@ -66,6 +67,9 @@ public class LoginService {
 
 		if (EmployeetoLog != null) {
 			Employee emp = dao.findByName(EmployeetoLog.getNom());
+			if(emp!=null) {
+				System.out.println("logged employee :"+emp.getNom());
+			}
 
 			// System.out.println("nom:" + EmployeetoLog.getNom());
 			// System.out.println("pass:" + EmployeetoLog.getPass_word());
@@ -87,64 +91,127 @@ public class LoginService {
 				Help.msg = "Bienvenue Admin";
 				help.goRefresh("/views/acceuil-admin");
 
+			} else {
+
+				if (ActiverSansNet()) {
+					if (emp != null && (EmployeetoLog.getNom().equals(emp.getNom()))
+							&& (EmployeetoLog.getPass_word().equals(emp.getPass_word()))) {
+						this.Logged = true;
+
+						EmployeetoLog = emp;
+
+						FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedEmployee",
+								EmployeetoLog);
+
+						Help.msg = "Bienvenue " + emp.getNom();
+						help.goRefresh("/views/acceuil");
+						this.Logged = true;
+
+					} else if (EmployeetoLog != null && (EmployeetoLog.getNom().equals("admin"))
+							&& (EmployeetoLog.getPass_word().equals("admin"))) {
+						this.Logged = true;
+
+						EmployeetoLog = new Employee();
+						EmployeetoLog.setNom("Admin");
+						EmployeetoLog.setProfil(Profil.Admin);
+
+
+						
+
+						FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedEmployee",
+								EmployeetoLog);
+
+						Help.msg = "Bienvenue Admin";
+						help.goRefresh("/views/acceuil");
+
+					}
+
+					else {
+						Help.error_msg = "Employee nom ou mot de passe incorrecte !";
+						Help.error();
+
+					}
+
+				} else {
+
+					System.out.println("inside bloc ActiverSansNet");
+					/*
+					System.out.println("log:"+EmployeetoLog.getNom());
+					System.out.println("log:"+EmployeetoLog.getPass_word());
+					System.out.println("emp:"+emp.getNom());
+					System.out.println("emp:"+emp.getPass_word());
+				   */	
+
+					if (PublicServerTime.getNTPDate() == null) {
+						Help.error_msg = "veuillez contacter l'administrateur !";
+						Help.error_msg2 = "veuillez se connecter à internet !";
+						Help.error();
+
+					}
+
+					else if (!licenceDateActive()) {
+						// System.out.println(licenceDateActive());
+						System.out.println(securityService.getListObjects().get(0).getDate_fin());
+						// System.out.println(PublicServerTime.getNTPDate());
+
+						Help.error_msg = "veuillez contacter l'administrateur !";
+						Help.error_msg2 = "pour activation du logiciel !";
+						Help.error();
+
+					}
+
+					else if (!licenceMacActive()) {
+						// System.out.println(licenceMacActive());
+
+						Help.error_msg = "veuillez contacter l'administrateur !";
+						Help.error_msg2 = "pour activation sur ce pc !";
+						Help.error();
+
+					}
+
+					else if (emp != null && (EmployeetoLog.getNom().equals(emp.getNom()))
+							&& (EmployeetoLog.getPass_word().equals(emp.getPass_word()))) {
+						this.Logged = true;
+
+						EmployeetoLog = emp;
+
+						FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedEmployee",
+								EmployeetoLog);
+
+						Help.msg = "Bienvenue " + emp.getNom();
+						help.goRefresh("/views/acceuil");
+						this.Logged = true;
+
+					} else if (EmployeetoLog != null && (EmployeetoLog.getNom().equals("admin"))
+							&& (EmployeetoLog.getPass_word().equals("admin"))) {
+						this.Logged = true;
+
+
+						EmployeetoLog = new Employee();
+						EmployeetoLog.setNom("Admin");
+						EmployeetoLog.setProfil(Profil.Admin);
+
+
+
+						FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedEmployee",
+								EmployeetoLog);
+
+						Help.msg = "Bienvenue Admin";
+						help.goRefresh("/views/acceuil");
+
+					}
+
+					else {
+						Help.error_msg = "Employee nom ou mot de passe incorrecte !";
+						Help.error();
+
+					}
+
+				}
+
 			}
 
-			else if (!licenceDateActive()) {
-				System.out.println(licenceDateActive());
-				System.out.println(securityService.getListObjects().get(0).getDate_fin());
-				System.out.println(PublicServerTime.getNTPDate());
-
-				Help.error_msg = "veuillez contacter l'administrateur !";
-				Help.error_msg2 = "pour activation du logiciel !";
-				Help.error();
-
-			}		
-			
-			else if (!licenceMacActive()) {
-				System.out.println(licenceDateActive());
-				System.out.println(securityService.getListObjects().get(0).getDate_fin());
-				System.out.println(PublicServerTime.getNTPDate());
-
-				Help.error_msg = "veuillez contacter l'administrateur !";
-				Help.error_msg2 = "pour activation sur ce pc !";
-				Help.error();
-
-			}
-
-			else if (emp != null && (EmployeetoLog.getNom().equals(emp.getNom()))
-					&& (EmployeetoLog.getPass_word().equals(emp.getPass_word()))) {
-				this.Logged = true;
-
-				EmployeetoLog = emp;
-
-				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedEmployee",
-						EmployeetoLog);
-
-				Help.msg = "Bienvenue " + emp.getNom();
-				help.goRefresh("/views/acceuil");
-				this.Logged = true;
-
-			} else if (EmployeetoLog != null && (EmployeetoLog.getNom().equals("admin"))
-					&& (EmployeetoLog.getPass_word().equals("admin"))) {
-				this.Logged = true;
-
-				EmployeetoLog = emp;
-
-				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedEmployee",
-						EmployeetoLog);
-
-				Help.msg = "Bienvenue Admin";
-				help.goRefresh("/views/acceuil");
-
-			}
-
-			else {
-				Help.error_msg = "Employee nom ou mot de passe incorrecte !";
-				Help.error();
-
-			}
 		}
-
 	}
 
 	@PostConstruct
@@ -168,6 +235,8 @@ public class LoginService {
 	 * logiciel
 	 **/
 	public boolean licenceDateActive() {
+		System.out.println("inside licenceDateActive");
+
 		if (securityService.getListObjects() != null && securityService.getListObjects().size() > 0) {
 
 			Date dserver = PublicServerTime.getNTPDate();
@@ -178,28 +247,44 @@ public class LoginService {
 
 			calServer.setTime(dserver);
 			calDateFin.setTime(dateFin);
-			
 
 			if (calDateFin.after(calServer)) {
-				 return true;
+				return true;
 
 			}
-			/*else if (calDateFin.before(calServer)) {
-				 return false;
-
-			}  */
-
 
 		}
-	
+
 		return false;
 	}
-	
+
 	public boolean licenceMacActive() {
-		
-		return securityService.getListObjects() != null && securityService.getListObjects().size() > 0
-				 && securityService.getListObjects().get(0).getMac_adresse().equals(securityService.CalcMacAdresse()); 
-	
+		System.out.println("inside licenceMacActive");
+
+		if (securityService.getListObjects() != null && securityService.getListObjects().size() > 0) {
+			for (Security s : securityService.getListObjects()) {
+				if (s.getMac_adresse().trim().equals(securityService.CalcMacAdresse().trim())) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+
+	}
+
+	public boolean ActiverSansNet() {
+
+		if (securityService.getListObjects() != null && securityService.getListObjects().size() > 0) {
+			for (Security s : securityService.getListObjects()) {
+				if (s.getActive().trim().equals("sans-internet")) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+
 	}
 
 	public Date addDays(Date date, int days) {

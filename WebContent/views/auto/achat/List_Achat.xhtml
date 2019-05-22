@@ -20,8 +20,7 @@
 	<p:spacer width="100" height="10" />
 	<p:commandButton value="Rapport Pdf" icon="fa fa-download" ajax="false"
 		style="width:30%">
-		<p:dataExporter type="pdf"
-			target="frmContent:index:listOperation:tbl"
+		<p:dataExporter type="pdf" target="frmContent:index:listOperation:tbl"
 			fileName="List-achat-auto" />
 	</p:commandButton>
 
@@ -36,10 +35,9 @@
 		<p:panel header="Listes Achat Auto /قائمة المشتريات  " id="pnl">
 			<p:separator></p:separator>
 
-			<p:dataTable value="#{achatService.listAnimeaux}" var="t" rows="10"
-				selectionMode="single" rowKey="#{t.ref_bon_achat}"
-				id="tbl"
-				rowIndexVar="rowIndex" paginator="false" 
+			<p:dataTable value="#{achatService.listAchatAuto}" var="t" rows="10"
+				selectionMode="single" rowKey="#{t.ref_bon_achat}" id="tbl"
+				rowIndexVar="rowIndex" paginator="false"
 				filteredValue="#{achatService.filtered}"
 				selection="#{achatService.objectSelected}"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -64,6 +62,7 @@
 				<p:column headerText="dateAchat" style="text-align: left; "
 					filterBy="#{t.dateAchat}">
 					<h:outputText value="#{t.dateAchat}">
+						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
 
 				</p:column>
@@ -71,7 +70,7 @@
 				<p:column headerText="dateOperation" style="text-align: left; "
 					filterBy="#{t.dateOperation}">
 					<h:outputText value="#{t.dateOperation}">
-						<f:convertDateTime pattern="yyyy-dd-MM" />
+						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
 
 				</p:column>
@@ -121,20 +120,20 @@
 
 					<h:outputText value="dateAchat" />
 					<h:outputText value="#{achatService.objectSelected.dateAchat}">
-						<f:convertDateTime pattern="yyyy-dd-MM" />
+						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
 
 
 
 					<h:outputText value="dateOperation" />
 					<h:outputText value="#{achatService.objectSelected.dateOperation}">
-						<f:convertDateTime pattern="yyyy-dd-MM" />
+						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
 
 
 					<h:outputText value="dateDePaiement" />
 					<h:outputText value="#{achatService.objectSelected.dateDePaiement}">
-						<f:convertDateTime pattern="yyyy-dd-MM" />
+						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
 
 
