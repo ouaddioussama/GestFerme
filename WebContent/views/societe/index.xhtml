@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+
+<h:body>
+		<p:growl id="kira" showDetail="true"  globalOnly="true"/>
+
+
+	<div class="ui-grid-col-11" >
+
+		<div align="left"
+			style="color: black; background-color: #eaeaea; margin-left: 00px; font-size: 15px; font-weight: bold; font-family: Times New Roman, Times, serif;">
+			Detail Societe Produit</div>
+
+
+
+
+		<p:tabView style="background-color: #f5f5f5"  id="index">
+
+
+
+			<p:tab title="Ajout Societe">
+				<ui:include src="Ajout_Societe.xhtml" />
+
+			</p:tab>
+
+
+			<p:tab title="List Societe">
+				<ui:include src="List_Societe.xhtml" />
+
+			</p:tab>
+
+
+			<p:tab title="Modif/Suppr Societe">
+				<ui:include src="m_d_Societe.xhtml" />
+
+			</p:tab>
+
+
+			
+
+
+
+		</p:tabView>
+
+
+
+
+	</div>
+</h:body>
+
+</html>

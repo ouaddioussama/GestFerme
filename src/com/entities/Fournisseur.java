@@ -1,12 +1,14 @@
 package com.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 
 import org.springframework.stereotype.Component;
 
 @Entity
 @Component
-public class Fournisseur extends Person {
+public class Fournisseur extends Person implements Serializable {
 	
 	public Fournisseur() {
 		

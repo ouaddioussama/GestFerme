@@ -21,6 +21,7 @@
 		style="width:30%">
 		<p:dataExporter type="pdf"
 			target="frmContent:index:listOperation:tbl"
+			  preProcessor="#{achatService.preProcessPDF}" 
 			fileName="List-achat-animaux" />
 	</p:commandButton>
 

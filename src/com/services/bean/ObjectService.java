@@ -1,6 +1,7 @@
 package com.services.bean;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -10,6 +11,11 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
@@ -19,6 +25,17 @@ import org.primefaces.model.SortOrder;
 
 import com.dao.interfaces.InterfDao;
 import com.entities.Achat;
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.ColumnText;
+import com.lowagie.text.pdf.PdfWriter;
 
 @ManagedBean(name = "ObjectBean")
 @ViewScoped
@@ -28,7 +45,7 @@ public class ObjectService<T> extends LazyDataModel<T> implements Serializable {
 
 	protected T objectToInsert;
 	protected T objectSelected;
-	protected InterfDao<T> daoObject; 
+	protected InterfDao<T> daoObject;
 
 	protected List<T> listObjects;
 	private List<Achat> filtered;
@@ -36,6 +53,8 @@ public class ObjectService<T> extends LazyDataModel<T> implements Serializable {
 	protected String indice_path = "";
 	protected String path = "/views/" + indice_path + "/index";
 	protected LazyDataModel<T> dataModel;
+	protected String title = "";
+	protected String Arabictitle = "";
 
 	public ObjectService() {
 
@@ -89,8 +108,6 @@ public class ObjectService<T> extends LazyDataModel<T> implements Serializable {
 	public void setListObjects_filtered(List<T> listObjects_filtered) {
 		this.listObjects_filtered = listObjects_filtered;
 	}
-	
-	
 
 	public List<Achat> getFiltered() {
 		return filtered;
@@ -211,4 +228,82 @@ public class ObjectService<T> extends LazyDataModel<T> implements Serializable {
 		this.dataModel = dataModel;
 	}
 
+	public void preProcessPDF(Object document)
+			throws IOException, BadElementException, DocumentException, com.itextpdf.text.DocumentException {
+		Document pdf = (Document) document;
+		pdf.open();
+
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+				.getResponse();
+
+		ServletOutputStream out = response.getOutputStream();
+		createPdfTitles(pdf, out);
+
+		pdf.setPageSize(PageSize.A4);
+
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		String logo = externalContext.getRealPath("") + "/resources/images/logo.jpg";
+		// File.separator + "resources" + File.separator + "images"
+		// + File.separator + "logo.jpg";
+
+		Image img = Image.getInstance(logo);
+		// img.setWidthPercentage(50);
+		// img.setTop(2);
+		// float scaler = ((pdf.getPageSize().getWidth() - pdf.leftMargin() -
+		// pdf.rightMargin() - 0) / pdf.getPageSize().getWidth())* 100;
+		// img.scalePercent(scaler);
+		img.scaleAbsolute(150, 300);
+		pdf.add(img);
+
+		Paragraph paragraph = new Paragraph(title);
+
+		// Font f = new Font(Font.BOLD, 50.0f, Font.UNDERLINE);
+
+		// paragraph.setFont(f);
+		paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+
+		pdf.add(Chunk.NEWLINE);
+
+		// pdf.add(paragraph);
+
+		pdf.add(Chunk.NEWLINE);
+		pdf.add(Chunk.NEWLINE);
+		pdf.add(Chunk.NEWLINE);
+
+		pdf.add(Chunk.NEWLINE);
+
+	}
+
+	public void createPdfTitles(Document document, OutputStream out)
+			throws DocumentException, IOException, com.itextpdf.text.DocumentException {
+
+		// Document document = new Document();
+
+		PdfWriter writer = PdfWriter.getInstance(document, out);
+		// PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new
+		// File("result7.pdf")));
+		document.open();
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+		String path = servletContext.getRealPath("");
+		String allPath = path + "/resources/font/arialuni.ttf";
+
+		BaseFont bf = BaseFont.createFont(allPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+		Font font = new Font(bf, 14);
+		ColumnText column = new ColumnText(writer.getDirectContent());
+		column.setSimpleColumn(196, 670, 669, 56);
+		column.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+
+		column.addElement(new Paragraph(title, font));
+		Paragraph pp = new Paragraph(Arabictitle, font);
+		column.addElement(pp);
+
+		column.go();
+		// document.add(Chunk.NEWLINE);
+
+		// document.close();
+		System.out.println("done!");
+
+	}
 }

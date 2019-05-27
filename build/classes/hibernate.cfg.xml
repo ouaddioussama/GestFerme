@@ -28,6 +28,7 @@
 		<mapping class="com.entities.Fich_Remb_Lait" />
 		<mapping class="com.entities.Historique_Prod" />
 		<mapping class="com.entities.Security" />
+		<mapping class="com.entities.Societe" />
 
 
 	</session-factory>

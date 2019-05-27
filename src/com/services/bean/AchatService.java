@@ -1,6 +1,8 @@
 package com.services.bean;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,7 +18,13 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
+import org.primefaces.component.export.PDFOptions;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -34,12 +42,36 @@ import com.dao.interfaces.InterfProduitDao;
 import com.entities.Achat;
 import com.entities.Historique_Prod;
 import com.entities.Produit;
+//import com.itextpdf.text.Font;
+//import com.itextpdf.text.Document;
+//import com.itextpdf.text.DocumentException;
+//import com.itextpdf.text.Font;
+//import com.itextpdf.text.Paragraph;
+//import com.itextpdf.text.pdf.BaseFont;
+//import com.itextpdf.text.pdf.ColumnText;
+//import com.itextpdf.text.pdf.PdfWriter;
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Cell;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.ColumnText;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+//import com.lowagie.text.Paragraph;
 
 @ManagedBean(name = "achatService")
 @ViewScoped
 @Service
 
-public class AchatService extends ObjectService<Achat> implements Serializable,SelectableDataModel<Achat> {
+public class AchatService extends ObjectService<Achat> implements Serializable, SelectableDataModel<Achat> {
 
 	/**
 	* 
@@ -49,8 +81,10 @@ public class AchatService extends ObjectService<Achat> implements Serializable,S
 	protected Achat objectToInsert;
 
 	private List<Achat> achatListDate = null;
-	
-	//private List<Achat> filtered;
+
+	private PDFOptions pdfOpt;
+
+	// private List<Achat> filtered;
 
 	@Autowired
 	protected InterfAchatDao dao;
@@ -126,7 +160,7 @@ public class AchatService extends ObjectService<Achat> implements Serializable,S
 
 	public void activatePaginator() {
 		paginatorActive = true;
-	} 
+	}
 
 	public void deactivatePaginator() {
 		paginatorActive = false;
@@ -135,7 +169,22 @@ public class AchatService extends ObjectService<Achat> implements Serializable,S
 	public boolean isPaginatorActive() {
 		return paginatorActive;
 	}
-	
+
+	public PDFOptions getPdfOpt() {
+		return pdfOpt;
+	}
+
+	public void setPdfOpt(PDFOptions pdfOpt) {
+		this.pdfOpt = pdfOpt;
+	}
+
+	public void customizationOptions() {
+		pdfOpt = new PDFOptions();
+		pdfOpt.setFacetBgColor("#F88017");
+		pdfOpt.setFacetFontColor("#0000ff");
+		pdfOpt.setFacetFontStyle("BOLD");
+		pdfOpt.setCellFontSize("12");
+	}
 
 	public void create() throws Exception {
 		System.out.println("inside create");
@@ -179,7 +228,8 @@ public class AchatService extends ObjectService<Achat> implements Serializable,S
 
 	@PostConstruct
 	public void init() {
-		
+		customizationOptions();
+
 		dataModel = new LazyDataModel<Achat>() {
 
 			private static final long serialVersionUID = 1L;
@@ -314,13 +364,16 @@ public class AchatService extends ObjectService<Achat> implements Serializable,S
 	}
 
 	public List<Achat> getListAchatAgricole() {
+		title = "List des Achats des materiels agricols";
+		Arabictitle = "قائمة المشتريات الخاصة بالمواد الفلاحية";
 
 		return getListAchat(Categorie.Agricole_Achat);
 
 	}
 
 	public List<Achat> getListAnimeaux() {
-
+		title = "List des Achats des Animaux";
+		Arabictitle = "قائمة المشتريات الخاصة بالمواشي";
 		return getListAchat(Categorie.Animeaux_Achat);
 
 	}
@@ -413,7 +466,7 @@ public class AchatService extends ObjectService<Achat> implements Serializable,S
 		System.out.println("ref Bon:" + objectToInsert.getRef_bon_achat());
 		if (listObjects != null && objectToInsert != null) {
 			try {
-                   System.out.println(listObjects.size());
+				System.out.println(listObjects.size());
 				//
 				listObjects.stream().filter(f -> f.getProduit().getCategorie() == c).forEach((p) -> {
 					System.out.println(p.getRef_bon_achat().intValue());
@@ -472,7 +525,7 @@ public class AchatService extends ObjectService<Achat> implements Serializable,S
 		cal.add(Calendar.DATE, days); // minus number would decrement the days
 		return cal.getTime();
 	}
-	
+
 	@Override
 	public Achat getRowData(String rowKey) {
 		for (Achat mandatory : dataModel) {
@@ -487,4 +540,19 @@ public class AchatService extends ObjectService<Achat> implements Serializable,S
 		return mandatory;
 	}
 
-}
+
+
+	public void postProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
+		Document pdf = (Document) document;
+		pdf.open();
+		// pdf.setPageSize(PageSize.A4);
+
+		// pdf.add(new Paragraph("fin in the rectangle." +
+		// listObjects.get(0).getMontant_global()));
+
+	}
+
+
+	}
+
+

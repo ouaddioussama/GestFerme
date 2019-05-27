@@ -23,6 +23,44 @@
 				<p:panel style="text-align:center;">
 					<h:panelGrid columns="2" layout="grid">
 						<div style="white-space: pre-wrap">
+							<h:outputText style="align:right" value="شعار الشركة / Logo" />
+						</div>
+
+						<p:commandLink action="/views/logo/index.xhtml?faces-redirect=true"
+							>
+
+							<p:graphicImage value="/resources/images/logoSociete.jpg" 
+							cache="false">
+							</p:graphicImage>
+
+
+						</p:commandLink>
+					</h:panelGrid>
+					</p:panel>
+
+
+
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+						<div style="white-space: pre-wrap">
+							<h:outputText style="align:right" value="الشركة / Societe" />
+						</div>
+
+						<p:commandLink update=":frmContent"
+						actionListener="#{HelpBean.go('/views/societe/index.xhtml')}"
+							>
+
+							<p:graphicImage value="/resources/images/societe.jpg">
+							</p:graphicImage>
+
+
+						</p:commandLink>
+					</h:panelGrid>
+					</p:panel>
+
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
+						<div style="white-space: pre-wrap">
 							<h:outputText style="align:right" value="الزبون/Client" />
 						</div>
 
@@ -54,7 +92,7 @@
 					</h:panelGrid>
 
 				</p:panel>
-				<p:panel style="text-align:center;">
+				<p:panel style="text-align:center;" rendered="#{loginService.employeetoLog.profil == 'Admin'}">
 					<h:panelGrid columns="2" layout="grid">
 						<div style="white-space: pre-wrap">
 							<h:outputText value="الموظفين/les Employés" />
