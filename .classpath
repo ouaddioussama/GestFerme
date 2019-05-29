@@ -14,5 +14,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/oussama-formation/jar/itextpdf-5.4.2.jar"/>
+	<classpathentry kind="lib" path="H:/jar/hibernate-entitymanager-4.3.8.Final.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -1,8 +1,6 @@
 package com.services.bean;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,11 +16,6 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.component.export.PDFOptions;
 import org.primefaces.event.RowEditEvent;
@@ -51,20 +44,8 @@ import com.entities.Produit;
 //import com.itextpdf.text.pdf.ColumnText;
 //import com.itextpdf.text.pdf.PdfWriter;
 import com.lowagie.text.BadElementException;
-import com.lowagie.text.Cell;
-import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.ColumnText;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
 //import com.lowagie.text.Paragraph;
 
 @ManagedBean(name = "achatService")
@@ -99,11 +80,25 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 	boolean existe = false;
 	boolean hide = false;
 	private boolean paginatorActive = true;
+	/** Lazy Models **/
+	private LazyDataModel<Achat> modelAgricole;
+	private LazyDataModel<Achat> modelAnimaux;
+	private LazyDataModel<Achat> modelLait;
+	private LazyDataModel<Achat> modelAuto;
+	private LazyDataModel<Achat> modelAutre;
 
 	/** utilisÃ© dans la vÃ©rification d'existence dans la liste des achats **/
 
 	public AchatService() {
 
+	}
+
+	public LazyDataModel<Achat> getModelAgricole() {
+		return modelAgricole;
+	}
+
+	public void setModelAgricole(LazyDataModel<Achat> modelAgricole) {
+		this.modelAgricole = modelAgricole;
 	}
 
 	public Achat getObjectToInsert() {
@@ -228,21 +223,9 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 
 	@PostConstruct
 	public void init() {
-		customizationOptions();
+		// customizationOptions();
 
-		dataModel = new LazyDataModel<Achat>() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public List<Achat> load(int first, int pageSize, String sortField, SortOrder sortOrder,
-					Map<String, Object> filters) {
-				// TODO Auto-generated method stub
-				setRowCount(dao.getCountAll());
-				return dao.LazyList(first, pageSize, sortField, SortOrder.ASCENDING.equals(sortOrder));
-			}
-
-		};
+		initLazyModel();
 
 		listObjects = (List<Achat>) dao.findAll();
 		System.out.println(listObjects.size());
@@ -367,14 +350,16 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 		title = "List des Achats des materiels agricols";
 		Arabictitle = "قائمة المشتريات الخاصة بالمواد الفلاحية";
 
-		return getListAchat(Categorie.Agricole_Achat);
+		// return getListAchat(Categorie.Agricole_Achat);
+		return dao.listAchat(Categorie.Agricole_Achat);
 
 	}
 
 	public List<Achat> getListAnimeaux() {
 		title = "List des Achats des Animaux";
 		Arabictitle = "قائمة المشتريات الخاصة بالمواشي";
-		return getListAchat(Categorie.Animeaux_Achat);
+		// return getListAchat(Categorie.Animeaux_Achat);
+		return dao.listAchat(Categorie.Animeaux_Achat);
 
 	}
 
@@ -540,8 +525,6 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 		return mandatory;
 	}
 
-
-
 	public void postProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
 		Document pdf = (Document) document;
 		pdf.open();
@@ -552,7 +535,68 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 
 	}
 
+	public void initLazyModel() {
+		modelAgricole = getLazyModelInstance(Categorie.Agricole_Achat);
+		modelAnimaux = getLazyModelInstance(Categorie.Animeaux_Achat);
+		modelAuto = getLazyModelInstance(Categorie.Auto_Achat);
+		modelAutre = getLazyModelInstance(Categorie.Autre_Achat);
 
 	}
 
+	public LazyDataModel<Achat> getLazyModelInstance(Categorie cat) {
+		return new LazyDataModel<Achat>() {
 
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public List<Achat> load(int first, int pageSize, String sortField, SortOrder sortOrder,
+					Map<String, Object> filters) {
+				// TODO Auto-generated method stub
+				setRowCount(dao.listAchat(cat).size());
+				System.out.println("siiize:" + dao.listAchat(cat).size());
+				List<Achat> lines = dao.LazyList(first, pageSize, sortField, SortOrder.ASCENDING.equals(sortOrder),filters,
+						cat);
+
+//				lines.forEach(p -> System.out.println(p.getId()));
+//				List<Achat> filtredData = new ArrayList<Achat>();
+                  /*
+				for (Achat a : lines) {
+					for (Map.Entry<String, Object> entry : filters.entrySet()) {
+						String v = (String) entry.getValue();
+						System.out.println("++++++++++v:" + v);// valeur entré
+						System.out.println("----------v:" + entry.getKey()); // column name of filter
+
+
+						 // if(String.valueOf(c.getCode_edi()).contains(v)) { result.add(c); }
+						 
+
+					}
+				} */
+
+				return lines;
+			}
+
+			@Override
+			public Object getRowKey(Achat achat) {
+				return achat != null ? achat.getId() : null;
+			}
+
+			@Override
+			public Achat getRowData(String rowKey) {
+				List<Achat> fruits = dao.listAchat(cat);
+				Integer value = Integer.valueOf(rowKey);
+
+				for (Achat fruit : fruits) {
+					if (fruit.getId().equals(value)) {
+						return fruit;
+					}
+				}
+
+				return null;
+			}
+
+		};
+
+	}
+
+}

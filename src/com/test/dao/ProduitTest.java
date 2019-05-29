@@ -9,6 +9,13 @@ import com.entities.Produit;
 public class ProduitTest {
 
 	public static void main(String[] args) {
+		CallMe();
+	}
+	
+	
+	public static void tryMe() {
+		
+
 		// TODO Auto-generated method stub
 		InterfProduitDao dao = new ProduitDao();
 		List<Produit> listProd = dao.findAll();
@@ -21,6 +28,13 @@ public class ProduitTest {
 
 		);
 
+	
+		
+	}
+	
+	public  static void CallMe() {
+		ProduitDao p=new ProduitDao();
+		System.out.println(p.listAnimaux().size());
 	}
 
 }

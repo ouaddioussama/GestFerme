@@ -4,9 +4,9 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-
 
 
 </h:head>
@@ -35,10 +35,10 @@
 			header="Listes Achat Agricole /قائمة المشتريات بالمواد الفلاحية  ">
 			<p:separator></p:separator>
 
-			<p:dataTable value="#{achatService.listAchatAgricole}" var="t"
-				rows="" selectionMode="single" rowKey="#{t.id}"
+			<p:dataTable value="#{achatService.modelAgricole}" var="t" rows="5"
+				selectionMode="single" rowKey="#{t.id}" lazy="true"
 				selection="#{achatService.objectSelected}" rowIndexVar="rowIndex"
-				paginator="false" id="tbl" filteredValue="#{achatService.filtered}"
+				paginator="true" id="tbl" filteredValue="#{achatService.filtered}"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,100,200">
 
@@ -81,9 +81,6 @@
 					</h:outputText>
 
 				</p:column>
-
-
-
 			</p:dataTable>
 		</p:panel>
 		<p:separator></p:separator>
