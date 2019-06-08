@@ -1,3 +1,41 @@
 .bgimg {
 	 background-image:url(#{request.contextPath}/resources/images/Background.jpg); 
 }
+.ui-datatable-hor-scroll .ui-datatable-tablewrapper, .scrolling-div .ui-datatable-tablewrapper
+	{
+	overflow: auto;
+	width: 100%;
+	padding-bottom: 5px;
+}
+
+/** Ici c'est la modification principale **/
+.ui-widget {
+	font-family: 'Segoe UI', Arial, sans-serif;
+	font-size: 15px !important;
+}
+
+.cssClass {
+	width: 100% !important
+}
+
+.ui-datatable .ui-datatable-header {
+	text-align: right !important;
+}
+
+.ui-button-text-only .ui-button-text {
+	padding: 0.3em 0.4em;
+}
+
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
+	visibility: hidden;
+}
+
+.ui-filter-column .ui-column-customfilter .custom-filter {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.year-spinner input {
+	width: 100%;
+	box-sizing: border-box;
+}

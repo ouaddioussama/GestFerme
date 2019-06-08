@@ -20,35 +20,36 @@
 			<h:panelGrid columns="3" layout="grid">
 
 
-				<p:panel style="text-align:center;">
+				<p:panel style="text-align:center;" 
+					rendered="#{loginService.employeetoLog.profil == 'Admin' or loginService.employeetoLog.profil == 'AdminGlobal'}">
 					<h:panelGrid columns="2" layout="grid">
 						<div style="white-space: pre-wrap">
 							<h:outputText style="align:right" value="شعار الشركة / Logo" />
 						</div>
 
-						<p:commandLink action="/views/logo/index.xhtml?faces-redirect=true"
-							>
+						<p:commandLink
+							action="/views/logo/index.xhtml?faces-redirect=true">
 
-							<p:graphicImage value="/resources/images/logoSociete.jpg" 
-							cache="false">
+							<p:graphicImage value="/resources/images/logoSociete.jpg"
+								cache="false">
 							</p:graphicImage>
 
 
 						</p:commandLink>
 					</h:panelGrid>
-					</p:panel>
+				</p:panel>
 
 
 
-				<p:panel style="text-align:center;">
+				<p:panel style="text-align:center;"
+					rendered="#{loginService.employeetoLog.profil == 'Admin' or loginService.employeetoLog.profil == 'AdminGlobal'}">
 					<h:panelGrid columns="2" layout="grid">
 						<div style="white-space: pre-wrap">
 							<h:outputText style="align:right" value="الشركة / Societe" />
 						</div>
 
 						<p:commandLink update=":frmContent"
-						actionListener="#{HelpBean.go('/views/societe/index.xhtml')}"
-							>
+							actionListener="#{HelpBean.go('/views/societe/index.xhtml')}">
 
 							<p:graphicImage value="/resources/images/societe.jpg">
 							</p:graphicImage>
@@ -56,7 +57,7 @@
 
 						</p:commandLink>
 					</h:panelGrid>
-					</p:panel>
+				</p:panel>
 
 				<p:panel style="text-align:center;">
 					<h:panelGrid columns="2" layout="grid">
@@ -92,7 +93,8 @@
 					</h:panelGrid>
 
 				</p:panel>
-				<p:panel style="text-align:center;" rendered="#{loginService.employeetoLog.profil == 'Admin'}">
+				<p:panel style="text-align:center;"
+					rendered="#{loginService.employeetoLog.profil == 'Admin' or loginService.employeetoLog.profil == 'AdminGlobal'}">
 					<h:panelGrid columns="2" layout="grid">
 						<div style="white-space: pre-wrap">
 							<h:outputText value="الموظفين/les Employés" />
@@ -162,20 +164,6 @@
 
 				<p:panel style="text-align:center;">
 					<h:panelGrid columns="2" layout="grid">
-						<div style="white-space: pre-wrap">
-							<h:outputText value="الحليب /le Lait" />
-						</div>
-
-						<p:commandLink update=":frmContent"
-							actionListener="#{HelpBean.go('/views/lait/index_principale.xhtml')}">
-							<p:graphicImage value="/resources/images/lait.jpg" />
-						</p:commandLink>
-					</h:panelGrid>
-
-				</p:panel>
-
-				<p:panel style="text-align:center;">
-					<h:panelGrid columns="2" layout="grid">
 
 						<div style="white-space: pre-wrap">
 							<h:outputText value="الشاحنة /Le camion" />
@@ -195,9 +183,24 @@
 
 				<p:panel style="text-align:center;">
 					<h:panelGrid columns="2" layout="grid">
+						<div style="white-space: pre-wrap">
+							<h:outputText value="الحليب /le Lait" />
+						</div>
+
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/lait/index_principale.xhtml')}">
+							<p:graphicImage value="/resources/images/lait.jpg" />
+						</p:commandLink>
+					</h:panelGrid>
+
+				</p:panel>
+
+				<p:panel style="text-align:center;">
+					<h:panelGrid columns="2" layout="grid">
 
 						<div style="white-space: pre-wrap">
-							<h:outputText value="tableau de bord" />
+							<h:outputText
+								value=" مستخلصات  المبيعات أو المشتريات التي يجب أن تؤدى اليوم" />
 						</div>
 
 
@@ -206,6 +209,29 @@
 							actionListener="#{HelpBean.go('/views/TabBord/index_principale.xhtml')}">
 
 							<p:graphicImage value="/resources/images/tableau-bord.jpg" />
+
+						</p:commandLink>
+					</h:panelGrid>
+
+				</p:panel>
+
+
+				<p:panel style="text-align:center;" 				
+					rendered="#{loginService.employeetoLog.profil == 'AdminGlobal'}">
+				
+					<h:panelGrid columns="2" layout="grid">
+
+						<div style="white-space: pre-wrap">
+							<h:outputText value="Administration" />
+						</div>
+
+
+
+						<p:commandLink update=":frmContent"
+							actionListener="#{HelpBean.go('/views/Security/index.xhtml')}">
+
+
+							<p:graphicImage value="/resources/images/administration.jpg" />
 
 						</p:commandLink>
 					</h:panelGrid>

@@ -21,19 +21,20 @@
 
 			<p:dataTable value="#{societeService.listObjects}" var="t" rows="10"
 			rowKey="#{rowIndex}" rowIndexVar="rowIndex"
-				paginator="true" editable="true"
+				paginator="false" editable="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,15">
 
-				<p:ajax event="rowEdit" listener="#{societeService.onRowEdit}" />
+				<p:ajax event="rowEdit" listener="#{societeService.onRowEdit}"
+				update="growl1 frmContent:index:list " />
 
 				<p:column headerText="numero" style="text-align: left;width: ">
 					<h:outputText value="#{rowIndex+1}" />
 				</p:column>
 
-
+	
 				<p:column headerText="nom societe" style="text-align: left; "
-					filterBy="#{t.nom_Societe}">
+					>
 
 					<p:cellEditor>
 						<f:facet name="output">
@@ -41,6 +42,102 @@
 						</f:facet>
 						<f:facet name="input">
 							<p:inputText value="#{t.nom_Societe}" style="width:96%"
+								label="Nom" />
+
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
+				<p:column headerText="email" style="text-align: left; width:16%"
+					>
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.email}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.email}" style="width:96%"
+								label="Nom" />
+
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
+				<p:column headerText="fax" style="text-align: left; "
+					 >
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.fax}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.fax}" style="width:96%"
+								label="Nom" />
+
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
+				<p:column headerText="telephone" style="text-align: left; "
+					 >
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.telephone}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.telephone}" style="width:96%"
+								label="Nom" />
+
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
+				<p:column headerText="adresse" style="text-align: left; "
+					 >
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.adresse}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.adresse}" style="width:96%"
+								label="Nom" />
+
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
+				<p:column headerText="code_postal" style="text-align: left; "
+					 >
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.code_postal}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.code_postal}" style="width:96%"
+								label="Nom" />
+
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
+				<p:column headerText="rib" style="text-align: left; "
+					 >
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{t.rib}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{t.rib}" style="width:96%"
 								label="Nom" />
 
 						</f:facet>
@@ -58,7 +155,7 @@
 
 					<p:commandButton value="Delete"
 						actionListener="#{societeService.delete(t)}" process="@this"
-						update="frmContent:index:md frmContent:index:list">
+						update="growl1 frmContent:index:list frmContent:index:md">
 						<p:confirm header="Confirmation" message="Are you sure?"
 							icon="ui-icon-alert" />
 					</p:commandButton>

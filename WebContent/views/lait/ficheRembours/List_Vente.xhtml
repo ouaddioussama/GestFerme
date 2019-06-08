@@ -23,7 +23,8 @@
 			<p:dataTable value="#{ficheLaitService.listObjects}" var="t"
 				id="RembventeLait" rows="10" selectionMode="single" rowKey="#{t.id}"
 				selection="#{ficheLaitService.objectSelected}"
-				rowIndexVar="rowIndex" paginator="false"
+				rowIndexVar="rowIndex" paginator="false" 
+				filteredValue="#{ficheLaitService.filtered}"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,100,200">
 
@@ -38,7 +39,7 @@
 
 
 				<p:column headerText="date D'operation" style="text-align: left; "
-					filterBy="#{t.date_operation}">
+					filterBy="#{t.date_operation}" filterMatchMode="contains">
 					<h:outputText value="#{t.date_operation}">
 						<f:convertDateTime pattern="dd-MM-yyyy" />
 					</h:outputText>

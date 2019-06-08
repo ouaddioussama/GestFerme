@@ -1,7 +1,9 @@
 package com.services.bean;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,7 +18,11 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
+import org.primefaces.component.export.PDFOptions;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.data.FilterEvent;
@@ -29,10 +35,25 @@ import com.Enum.Types_Reglement;
 import com.Enum.Unite;
 import com.dao.interfaces.InterfProduitDao;
 import com.dao.interfaces.InterfVenteDao;
+import com.entities.Achat;
 import com.entities.Fich_Remb_Lait;
 import com.entities.Historique_Prod;
 import com.entities.Produit;
 import com.entities.Vente;
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.ColumnText;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 
 @ManagedBean(name = "venteService")
 @ViewScoped
@@ -49,8 +70,16 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 	@Autowired
 	protected Fich_Remb_Lait objectTosearch;
-	
+
 	boolean existe = false;
+
+	private ArrayList<Vente> filtredAchatAgricole = new ArrayList<Vente>();
+	private ArrayList<Vente> filtredAchatAnimaux = new ArrayList<Vente>();;
+	private ArrayList<Vente> filtredAchatAuto = new ArrayList<Vente>();;
+	private ArrayList<Vente> filtredAchatAutre = new ArrayList<Vente>();;
+
+	private String[] headers = { "Numero \n الرقم ", "ref_Bon \n مرجع البيع", "Produit \n المنتوج", "Client \n الزبون",
+			"DateVente \n تاريخ البيع ", "quantite  \n  كمية ", "Montant \n  المبلغ" };
 
 	/**
 	 * utilisé dans le calcul de la somme du montant depuis date debut vers date de
@@ -111,6 +140,38 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 		this.objectTosearch = objectTosearch;
 	}
 
+	public ArrayList<Vente> getFiltredAchatAgricole() {
+		return filtredAchatAgricole;
+	}
+
+	public void setFiltredAchatAgricole(ArrayList<Vente> filtredAchatAgricole) {
+		this.filtredAchatAgricole = filtredAchatAgricole;
+	}
+
+	public ArrayList<Vente> getFiltredAchatAnimaux() {
+		return filtredAchatAnimaux;
+	}
+
+	public void setFiltredAchatAnimaux(ArrayList<Vente> filtredAchatAnimaux) {
+		this.filtredAchatAnimaux = filtredAchatAnimaux;
+	}
+
+	public ArrayList<Vente> getFiltredAchatAuto() {
+		return filtredAchatAuto;
+	}
+
+	public void setFiltredAchatAuto(ArrayList<Vente> filtredAchatAuto) {
+		this.filtredAchatAuto = filtredAchatAuto;
+	}
+
+	public ArrayList<Vente> getFiltredAchatAutre() {
+		return filtredAchatAutre;
+	}
+
+	public void setFiltredAchatAutre(ArrayList<Vente> filtredAchatAutre) {
+		this.filtredAchatAutre = filtredAchatAutre;
+	}
+
 	public void create() throws Exception {
 		System.out.println("inside create");
 
@@ -137,6 +198,7 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 			try {
 				listObjects.add(objectToInsert);
+				updatefilterswhenAdd();
 
 			} catch (Exception e) {
 				listObjects = (List<Vente>) dao.findAll();
@@ -200,6 +262,8 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 			listReglement.add(t.toString());
 		}
 
+		initFilters();
+
 	}
 
 	public void reset() {
@@ -213,6 +277,8 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 		if (editedModele != null) {
 			dao.updateIstance(editedModele);
+			updateLists(editedModele);
+
 			Help.msg = "mise e  jour faite avec Succes";
 
 		} else {
@@ -259,6 +325,14 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 		}
 
 		return listVente;
+	}
+
+	public void initFilters() {
+		filtredAchatAgricole = (ArrayList<Vente>) getListVente(Categorie.Agricole_Vente);
+		filtredAchatAnimaux = (ArrayList<Vente>) getListVente(Categorie.Animeaux_Vente);
+		filtredAchatAuto = (ArrayList<Vente>) getListVente(Categorie.Auto_Vente);
+		filtredAchatAutre = (ArrayList<Vente>) getListVente(Categorie.Autre_Vente);
+
 	}
 
 	public List<Vente> getListVenteAgricole() {
@@ -435,7 +509,7 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 		}
 
 	}
-	
+
 	// Recuperer la liste des achats selon type de produit
 	public void verifRefVente(Categorie c) throws BreakException {
 		System.out.println("inside verifRefAchat");
@@ -444,17 +518,18 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 			try {
 
 				//
-				listObjects.stream().filter(f -> f.getProduit().getCategorie() == c
-					&&	f.getRef_bon_vente()!=null).forEach((p) -> {
-					existe = objectToInsert.getRef_bon_vente() == null ? false
-							: objectToInsert.getRef_bon_vente().intValue() == p.getRef_bon_vente().intValue() ? true
-									: false;
-					System.out.println("ref inside loop:" + p.getRef_bon_vente().intValue());
-					if (existe) {
-						throw new BreakException();
-					}
+				listObjects.stream().filter(f -> f.getProduit().getCategorie() == c && f.getRef_bon_vente() != null)
+						.forEach((p) -> {
+							existe = objectToInsert.getRef_bon_vente() == null ? false
+									: objectToInsert.getRef_bon_vente().intValue() == p.getRef_bon_vente().intValue()
+											? true
+											: false;
+							System.out.println("ref inside loop:" + p.getRef_bon_vente().intValue());
+							if (existe) {
+								throw new BreakException();
+							}
 
-				}
+						}
 
 				);
 
@@ -471,7 +546,7 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 		}
 
 	}
-	
+
 	public void verifRefVenteAgricole() throws BreakException {
 		verifRefVente(Categorie.Agricole_Vente);
 
@@ -606,7 +681,7 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 		}
 
-	} 
+	}
 
 	public List<Vente> getlistVenteLaitDateSearch()
 
@@ -621,14 +696,277 @@ public class VenteService extends ObjectService<Vente> implements Serializable {
 
 	}
 
+	public void preProcessPDF(Object document)
+			throws IOException, BadElementException, DocumentException, com.itextpdf.text.DocumentException {
+		Document pdf = (Document) document;
+		pdf.open();
+
+		FacesContext fc = FacesContext.getCurrentInstance();
+		ExternalContext ec = fc.getExternalContext();
+
+		ec.setResponseContentType("application/pdf");
+		ec.setResponseHeader("Content-disposition", "inline=filename=file.pdf");
+
+		OutputStream out = ec.getResponseOutputStream();
+		createPdfTitles(pdf, out);
+
+		pdf.setPageSize(PageSize.A4);
+
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		String logo = externalContext.getRealPath("") + "/resources/images/logo.jpg";
+		Image img = Image.getInstance(logo);
+		pdf.add(img);
+		pdf.add(Chunk.NEWLINE);
+		pdf.add(Chunk.NEWLINE);
+		pdf.add(Chunk.NEWLINE);
+		pdf.add(Chunk.NEWLINE);
+		pdf.add(Chunk.NEWLINE);
+		pdf.add(Chunk.NEWLINE);
+
+	}
+
 	public List<Vente> getlistVenteByDateSearch(Categorie c, Date dateInf, Date dateSup) {
 		List<Vente> listAll = new ArrayList<Vente>();
-		listAll = listObjects.stream().filter((p) -> (p.getProduit() != null && p.getProduit().getCategorie() == c
-				&& p.getDateDePaiement().after(addDays(dateInf, -1)) && p.getDateDePaiement().before((addDays(dateSup, 1))))
+		listAll = listObjects.stream()
+				.filter((p) -> (p.getProduit() != null && p.getProduit().getCategorie() == c
+						&& p.getDateDePaiement().after(addDays(dateInf, -1))
+						&& p.getDateDePaiement().before((addDays(dateSup, 1))))
 
-		).collect(Collectors.toList());
+				).collect(Collectors.toList());
 
 		return listAll;
+	}
+
+	public void createPdfTitles(Document document, OutputStream out)
+			throws DocumentException, IOException, com.itextpdf.text.DocumentException {
+
+		// Document document = new Document();
+
+		PdfWriter writer = PdfWriter.getInstance(document, out);
+		// PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new
+		// File("result7.pdf")));
+		document.open();
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+		String path = servletContext.getRealPath("");
+		String allPath = path + "/resources/font/arialuni.ttf";
+
+		BaseFont bf = BaseFont.createFont(allPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+		Font font = new Font(bf, 14);
+		ColumnText column = new ColumnText(writer.getDirectContent());
+		column.setSimpleColumn(196, 690, 669, 56);
+		column.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+
+		column.addElement(new Paragraph(this.title, font));
+		Paragraph pp = new Paragraph(this.Arabictitle, font);
+		column.addElement(pp);
+		column.addElement(Chunk.NEWLINE);
+		column.addElement(Chunk.NEWLINE);
+
+		column.go();
+		// document.add(Chunk.NEWLINE);
+
+		// document.close();
+		System.out.println("done!");
+
+	}
+
+	public void changeTitles(String titleFr, String titleAr) {
+		this.title = titleFr;
+		this.Arabictitle = titleAr;
+	}
+
+	public void createPdf(String type)
+			throws DocumentException, IOException, com.itextpdf.text.DocumentException, ParseException {
+		switch (type) {
+		case "Ag":
+			generatePdf(filtredAchatAgricole);
+		case "An":
+			generatePdf(filtredAchatAnimaux);
+		case "Auto":
+			generatePdf(filtredAchatAuto);
+		case "Autre":
+			generatePdf(filtredAchatAutre);
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	public void generatePdf(List<Vente> filtredAchat) throws DocumentException, IOException, ParseException {
+
+		FacesContext fc = FacesContext.getCurrentInstance();
+		ExternalContext ec = fc.getExternalContext();
+		ec.setResponseContentType("application/pdf");
+		ec.setResponseHeader("Content-disposition", "inline=filename=file.pdf");
+
+		System.out.println("heeeeeeeeeeere:" + filtredAchatAgricole.size());
+
+		Document document = new Document();
+		PdfWriter writer = PdfWriter.getInstance(document, ec.getResponseOutputStream());
+
+		// PdfWriter writer = PdfWriter.getInstance(document, out);
+		// PdfWriter writer = PdfWriter.getInstance(document, out);
+		document.open();
+		/** Ajout de l image **/
+		String logo = ec.getRealPath("") + "/resources/images/logo.jpg";
+		Image img = Image.getInstance(logo);
+		document.add(img);
+		document.add(Chunk.NEWLINE);
+		/** Ajout des titres **/
+
+		PdfPTable pdfTableH = new PdfPTable(1);
+		pdfTableH.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+		pdfTableH.setHorizontalAlignment(Element.ALIGN_CENTER);
+		pdfTableH.setWidthPercentage(100);
+		pdfTableH.getDefaultCell().setBorder(0);
+
+		String path = ec.getRealPath("");
+		String allPath = path + "/resources/font/arialuni.ttf";
+
+		BaseFont bf = BaseFont.createFont(allPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+		Font font = new Font(bf, 14);
+
+		PdfPCell celltitre = new PdfPCell(new Paragraph(this.title, font));
+		celltitre.setHorizontalAlignment(Element.ALIGN_CENTER);
+		celltitre.setBorder(0);
+		pdfTableH.addCell(celltitre);
+
+		PdfPCell celltitreAr = new PdfPCell(new Paragraph(this.Arabictitle, font));
+		celltitreAr.setHorizontalAlignment(Element.ALIGN_CENTER);
+		celltitreAr.setBorder(0);
+		pdfTableH.addCell(celltitreAr);
+
+		PdfPCell emptyCell = new PdfPCell(new Paragraph("\n", font));
+		emptyCell.setBorder(0);
+		pdfTableH.addCell(emptyCell);
+
+		document.add(pdfTableH);
+		document.add(Chunk.NEWLINE);
+
+		/** Ajout du headers **/
+
+		// PdfPTable pdfTable = new PdfPTable(headers.length);
+		PdfPTable pdfTable = new PdfPTable(new float[] { 15, 15, 20, 20, 20, 15, 10 });
+		pdfTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+		pdfTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+		pdfTable.setWidthPercentage(100);
+
+		for (String h : headers) {
+			PdfPCell cell1 = new PdfPCell(new Paragraph(h, font));
+			cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell1);
+
+		}
+
+		int index = 1;
+		double total = 0;
+		/** Add Body **/
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+
+		for (Vente a : filtredAchat) {
+
+			PdfPCell cell1 = new PdfPCell(new Paragraph(String.valueOf(index), font));
+			cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			// cell1.setPaddingLeft(0);
+			pdfTable.addCell(cell1);
+
+			PdfPCell cell12 = new PdfPCell(
+					new Paragraph(a.getRef_bon_achat() != null ? String.valueOf(a.getRef_bon_achat()) : "", font));
+			cell12.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell12);
+
+			PdfPCell cell2 = new PdfPCell(
+					new Paragraph(a.getProduit() != null ? a.getProduit().getDesignation_prod() : "", font));
+			cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell2);
+			PdfPCell cell3 = new PdfPCell(new Paragraph(a.getClient() != null ? a.getClient().getNom() : "", font));
+			cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell3);
+
+			PdfPCell cell4 = new PdfPCell(
+					new Paragraph((a.getDateAchat() != null ? dateFormat.format(a.getDateAchat()) : ""), font));
+			cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell4);
+
+			PdfPCell cell5 = new PdfPCell(new Paragraph(String.valueOf(a.getQuantite()), font));
+			cell5.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell5);
+
+			PdfPCell cell6 = new PdfPCell(new Paragraph(String.valueOf(a.getMontant_global()), font));
+			cell6.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell6);
+
+			System.out.println("m!" + a.getMontant_global());
+			System.out.println("t!" + total);
+			// calcul total Montant
+			total += a.getMontant_global();
+			index++;
+		}
+		// column2.addElement(Chunk.NEWLINE);
+		document.add(pdfTable);
+		document.add(Chunk.NEWLINE);
+		document.add(new Paragraph("Montant Global " + String.format("%.2f", total) + " DH"));
+
+		document.close();
+		writer.close();
+		System.out.println("done!");
+
+	}
+
+	public void updateLists(Vente f) {
+		updateFileteredList(f);
+		updateObjectList(f);
+	}
+
+	public void updateFileteredList(Vente f) {
+
+		int index = 0;
+
+		for (Vente fou : listObjects_filtered) {
+			if (fou.getId() == f.getId()) {
+				break;
+			}
+			index++;
+		}
+
+		listObjects_filtered.set(index, f);
+
+	}
+
+	public void updateObjectList(Vente f) {
+
+		int index = 0;
+
+		for (Vente fou : listObjects) {
+			if (fou.getId() == f.getId()) {
+				break;
+			}
+			index++;
+		}
+
+		listObjects.set(index, f);
+
+	}
+	
+	public void updatefilterswhenAdd() {
+		if (objectToInsert != null && objectToInsert.getProduit() != null) {
+
+			Categorie cat = objectToInsert.getProduit().getCategorie();
+			if (cat == Categorie.Agricole_Vente)
+				filtredAchatAgricole.add(objectToInsert);
+			else if (cat == Categorie.Animeaux_Vente)
+				filtredAchatAnimaux.add(objectToInsert);
+			else if (cat == Categorie.Autre_Vente)
+				filtredAchatAutre.add(objectToInsert);
+			else if (cat == Categorie.Auto_Vente)
+				filtredAchatAuto.add(objectToInsert);
+
+		}
+
 	}
 
 }

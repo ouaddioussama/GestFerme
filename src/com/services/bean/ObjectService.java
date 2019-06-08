@@ -55,7 +55,7 @@ public class ObjectService<T> extends LazyDataModel<T> implements Serializable {
 	protected LazyDataModel<T> dataModel;
 	protected String title = "";
 	protected String Arabictitle = "";
-
+	
 	public ObjectService() {
 
 	};
@@ -228,82 +228,5 @@ public class ObjectService<T> extends LazyDataModel<T> implements Serializable {
 		this.dataModel = dataModel;
 	}
 
-	public void preProcessPDF(Object document)
-			throws IOException, BadElementException, DocumentException, com.itextpdf.text.DocumentException {
-		Document pdf = (Document) document;
-		pdf.open();
 
-		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
-				.getResponse();
-
-		ServletOutputStream out = response.getOutputStream();
-		createPdfTitles(pdf, out);
-
-		pdf.setPageSize(PageSize.A4);
-
-		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-		String logo = externalContext.getRealPath("") + "/resources/images/logo.jpg";
-		// File.separator + "resources" + File.separator + "images"
-		// + File.separator + "logo.jpg";
-
-		Image img = Image.getInstance(logo);
-		// img.setWidthPercentage(50);
-		// img.setTop(2);
-		// float scaler = ((pdf.getPageSize().getWidth() - pdf.leftMargin() -
-		// pdf.rightMargin() - 0) / pdf.getPageSize().getWidth())* 100;
-		// img.scalePercent(scaler);
-		img.scaleAbsolute(150, 300);
-		pdf.add(img);
-
-		Paragraph paragraph = new Paragraph(title);
-
-		// Font f = new Font(Font.BOLD, 50.0f, Font.UNDERLINE);
-
-		// paragraph.setFont(f);
-		paragraph.setAlignment(Paragraph.ALIGN_CENTER);
-
-		pdf.add(Chunk.NEWLINE);
-
-		// pdf.add(paragraph);
-
-		pdf.add(Chunk.NEWLINE);
-		pdf.add(Chunk.NEWLINE);
-		pdf.add(Chunk.NEWLINE);
-
-		pdf.add(Chunk.NEWLINE);
-
-	}
-
-	public void createPdfTitles(Document document, OutputStream out)
-			throws DocumentException, IOException, com.itextpdf.text.DocumentException {
-
-		// Document document = new Document();
-
-		PdfWriter writer = PdfWriter.getInstance(document, out);
-		// PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new
-		// File("result7.pdf")));
-		document.open();
-		FacesContext context = FacesContext.getCurrentInstance();
-
-		ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
-		String path = servletContext.getRealPath("");
-		String allPath = path + "/resources/font/arialuni.ttf";
-
-		BaseFont bf = BaseFont.createFont(allPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-		Font font = new Font(bf, 14);
-		ColumnText column = new ColumnText(writer.getDirectContent());
-		column.setSimpleColumn(196, 670, 669, 56);
-		column.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
-
-		column.addElement(new Paragraph(title, font));
-		Paragraph pp = new Paragraph(Arabictitle, font);
-		column.addElement(pp);
-
-		column.go();
-		// document.add(Chunk.NEWLINE);
-
-		// document.close();
-		System.out.println("done!");
-
-	}
 }

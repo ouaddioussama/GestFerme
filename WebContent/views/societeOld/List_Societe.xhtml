@@ -19,7 +19,7 @@
 			<p:separator></p:separator>
 
 			<p:dataTable value="#{societeService.listObjects}" var="t" rows="10"
-				rowKey="#{rowIndex}" rowIndexVar="rowIndex" paginator="false"
+				rowKey="#{rowIndex}" rowIndexVar="rowIndex" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,100,200">
 
@@ -31,50 +31,8 @@
 
 
 				<p:column headerText="nom_Societe" style="text-align: left; "
-					 >
+					filterBy="#{t.nom_Societe}">
 					<h:outputText value="#{t.nom_Societe}" />
-
-				</p:column>
-
-
-				<p:column headerText="email" style="text-align: left; width:16% "
-					 >
-					<h:outputText value="#{t.email}" />
-
-				</p:column>
-
-
-				<p:column headerText="fax" style="text-align: left; "
-					 >
-					<h:outputText value="#{t.fax}" />
-
-				</p:column>
-
-
-				<p:column headerText="telephone" style="text-align: left; "
-					 >
-					<h:outputText value="#{t.telephone}" />
-
-				</p:column>
-
-
-				<p:column headerText="adresse" style="text-align: left; "
-					 >
-					<h:outputText value="#{t.adresse}" />
-
-				</p:column>
-
-
-				<p:column headerText="code_postal" style="text-align: left; "
-					 >
-					<h:outputText value="#{t.code_postal}" />
-
-				</p:column>
-
-		
-				<p:column headerText="rib" style="text-align: left; "
-					 >
-					<h:outputText value="#{t.rib}" />
 
 				</p:column>
 

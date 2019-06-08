@@ -10,7 +10,7 @@
 </h:head>
 <h:body styleClass="Body">
 
-	<h:form>
+	<h:form id="add">
 		<p:growl id="growl" life="1000" showDetail="true" />
 		
 		<p:panel header="Ajout Information societe " styleClass="text_normal"
@@ -18,10 +18,37 @@
 			<h:panelGrid columns="4" id="panelmodel"
 				style="color:blue;width:100%" cellpadding="4">
 
-
+	
 				<h:outputLabel value="nom" styleClass="text_normal" />
 				<p:inputText style="width:80%"
 					value="#{societeService.objectToInsert.nom_Societe}" />
+
+				<h:outputLabel value="email" styleClass="text_normal" />
+				<p:inputText style="width:80%"
+					value="#{societeService.objectToInsert.email}" />
+
+				<h:outputLabel value="telephone" styleClass="text_normal" />
+				<p:inputText style="width:80%"
+					value="#{societeService.objectToInsert.telephone}" />
+
+				<h:outputLabel value="fax" styleClass="text_normal" />
+				<p:inputText style="width:80%"
+					value="#{societeService.objectToInsert.fax}" />
+
+
+				<h:outputLabel value="code_postal" styleClass="text_normal" />
+				<p:inputText style="width:80%"
+					value="#{societeService.objectToInsert.code_postal}" />
+
+
+				<h:outputLabel value="adresse" styleClass="text_normal" />
+				<p:inputText style="width:80%"
+					value="#{societeService.objectToInsert.adresse}" />
+
+
+				<h:outputLabel value="rib" styleClass="text_normal" />
+				<p:inputText style="width:80%"
+					value="#{societeService.objectToInsert.rib}" />
 
 
 			
@@ -32,8 +59,8 @@
 
 		<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
 			actionListener="#{societeService.create}"
-			update="growl1 frmContent"
-			/>
+						update="growl1 frmContent:index:add frmContent:index:list frmContent:index:md" />
+			
 
 
 

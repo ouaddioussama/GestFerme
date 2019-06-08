@@ -13,7 +13,16 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/oussama-formation/jar/itextpdf-5.4.2.jar"/>
-	<classpathentry kind="lib" path="H:/jar/hibernate-entitymanager-4.3.8.Final.jar"/>
+	<classpathentry kind="lib" path="D:/oussama-formation/jar/itextpdf-5.4.2.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="H:/jar/hibernate-entitymanager-4.3.8.Final.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v8.5"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

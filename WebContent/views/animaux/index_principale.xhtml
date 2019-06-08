@@ -18,7 +18,7 @@
 
 
 		<p:panel style="text-align:center;width:80%;height:100%">
-			<h:panelGrid columns="2" layout="grid" >
+			<h:panelGrid columns="2" layout="grid">
 
 
 				<p:panel style="text-align:center;">
@@ -28,7 +28,8 @@
 						</div>
 
 						<p:commandLink update=":frmContent"
-							actionListener="#{HelpBean.go('/views/animaux/achat/index.xhtml')}">
+							actionListener="#{HelpBean.go('/views/animaux/achat/index.xhtml')}"
+							oncomplete="#{achatService.changeTitles('List des Achats des elevages','قائمة المشتريات الخاصة بالمواشي')}">
 
 							<p:graphicImage value="/resources/images/achat.jpg">
 							</p:graphicImage>
@@ -39,14 +40,16 @@
 
 				</p:panel>
 				<p:panel style="text-align:center;">
-					<h:panelGrid columns="2" layout="grid" >
+					<h:panelGrid columns="2" layout="grid">
 						<div style="white-space: pre-wrap">
 							<h:outputText style="align:left" value="االمبيعات /les Ventes" />
 						</div>
 
 						<p:commandLink update=":frmContent"
-						actionListener="#{HelpBean.go('/views/animaux/vente/index.xhtml')}">
-						
+							actionListener="#{HelpBean.go('/views/animaux/vente/index.xhtml')}"
+					    	oncomplete="#{venteService.changeTitles('List des Ventes des elevages','قائمة المبيعات الخاصة بالمواشي')}">
+
+
 
 							<p:graphicImage value="/resources/images/vente.jpg">
 							</p:graphicImage>

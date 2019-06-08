@@ -12,13 +12,15 @@
 </h:head>
 
 <h:body>
-	<p:commandButton value="Impression" icon="fa fa-print" style="width:30%">
+	<p:commandButton value="Impression" icon="fa fa-print"
+		style="width:30%">
 		<p:printer target="frmContent:index:listOperation:panl" />
 	</p:commandButton>
 	<p:spacer width="100" height="10" />
-	<p:commandButton value="Rapport Pdf" icon="fa fa-download" 
-	 ajax="false" style="width:30%">
-		<p:dataExporter type="pdf" target="frmContent:index:listOperation:listLait"
+	<p:commandButton value="Rapport Pdf" icon="fa fa-download"
+		onclick="this.form.target = '_blank'" ajax="false" style="width:30%">
+		<p:dataExporter type="pdf"
+			target="frmContent:index:listOperation:listLait"
 			fileName="List-vente-lait" />
 	</p:commandButton>
 
@@ -34,9 +36,9 @@
 
 
 			<p:dataTable value="#{venteService.listVenteLait}" var="t" rows="10"
-				selectionMode="single" rowKey="#{t.ref_bon_vente}"
+				selectionMode="single" rowKey="#{t.id}"
 				selection="#{venteService.objectSelected}" id="listLait"
-				rowIndexVar="rowIndex" paginator="false"
+				rowIndexVar="rowIndex" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,100,200">
 
@@ -47,16 +49,20 @@
 				<p:ajax event="filter" process="@this"
 					listener="#{venteService.onFilter}"
 					update="frmContent:index:listOperation:carDetail" />
-
-
 				<p:column headerText="numero" style="text-align: left;width: ">
 					<h:outputText value="#{rowIndex+1}" />
 				</p:column>
 
 
-				<p:column headerText="ref_bon_vente" style="text-align: left; "
-					filterBy="#{t.ref_bon_vente}">
-					<h:outputText value="#{t.ref_bon_vente}" />
+				<p:column headerText="Produit" style="text-align: left; "
+					filterBy="#{t.produit.designation_prod}">
+					<h:outputText value="#{t.produit.designation_prod}" />
+
+				</p:column>
+
+				<p:column headerText="Client" style="text-align: left; "
+					filterBy="#{t.client.nom}">
+					<h:outputText value="#{t.client.nom}" />
 
 				</p:column>
 				<p:column headerText="date" style="text-align: left; "
@@ -64,6 +70,25 @@
 					<h:outputText value="#{t.dateDePaiement}">
 						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
+
+				</p:column>
+				<p:column headerText="quantite" style="text-align: left; "
+					filterBy="#{t.quantite}">
+					<h:outputText value="#{t.quantite}" />
+
+				</p:column>
+
+
+				<p:column headerText="Montant" style="text-align: left; "
+					filterBy="#{t.montant_global}">
+					<h:outputText value="#{t.montant_global}">
+					</h:outputText>
+
+				</p:column>
+
+				<p:column headerText="ref_bon_vente" style="text-align: left; "
+					filterBy="#{t.ref_bon_vente}">
+					<h:outputText value="#{t.ref_bon_vente}" />
 
 				</p:column>
 
@@ -76,7 +101,7 @@
 
 
 
-		<p:dialog header="Vente Info/معلومات المبيعات  الخاصة بالمواشي"
+		<p:dialog header="Vente Info/معلومات المبيعات  الخاصة بالحليب"
 			widgetVar="venteDialogL" modal="false" resizable="false">
 			<p:outputPanel id="carDetail" style="text-align:center;">
 				<p:panelGrid columns="2" columnClasses="label,value">

@@ -30,14 +30,14 @@
 				var="t" rowKey="#{t.id}" rowIndexVar="rowIndex" rows="10" id="tbl"
 				editable="true" rowsPerPageTemplate="5,10,15">
 
+				<p:column headerText="reference" style="text-align: left;width: ">
+					<h:outputText value="#{t.id}" />
+				</p:column>
+
 				
 				<p:column headerText="libelle Produit / إسم  المنتوج"
 					style="text-align: left; " >
 							<h:outputText value="#{t.designation_prod}" />
-				</p:column>
-
-				<p:column headerText="quantite Actuelle" style="text-align: left;width: ">
-					<h:outputText value="#{t.quantite_actuelle}" />
 				</p:column>
 
 

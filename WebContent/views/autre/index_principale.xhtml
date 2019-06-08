@@ -28,7 +28,8 @@
 						</div>
 
 						<p:commandLink update=":frmContent"
-							actionListener="#{HelpBean.go('/views/autre/achat/index.xhtml')}">
+							actionListener="#{HelpBean.go('/views/autre/achat/index.xhtml')}"
+							oncomplete="#{achatService.changeTitles('List des Achats diverses','قائمة مشتريات  المنتجات المتنوعة')}">
 
 							<p:graphicImage value="/resources/images/achat.jpg">
 							</p:graphicImage>
@@ -45,7 +46,8 @@
 						</div>
 
 						<p:commandLink update=":frmContent"
-						actionListener="#{HelpBean.go('/views/autre/vente/index.xhtml')}">
+						actionListener="#{HelpBean.go('/views/autre/vente/index.xhtml')}"
+					    oncomplete="#{venteService.changeTitles('List des Ventes diverses','قائمة مبيعات  المنتجات المتنوعة ')}">
 						
 
 							<p:graphicImage value="/resources/images/vente.jpg">

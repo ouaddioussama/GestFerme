@@ -52,9 +52,16 @@
 				</p:column>
 
 
-				<p:column headerText="ref_bon_achat" style="text-align: left; "
-					filterBy="#{t.ref_bon_achat}">
-					<h:outputText value="#{t.ref_bon_achat}" />
+
+				<p:column headerText="Produit" style="text-align: left; "
+					filterBy="#{t.produit.designation_prod}">
+					<h:outputText value="#{t.produit.designation_prod}" />
+
+				</p:column>
+
+			<p:column headerText="Fournisseur" style="text-align: left; "
+					filterBy="#{t.fournisseur.nom}">
+					<h:outputText value="#{t.fournisseur.nom}" />
 
 				</p:column>
 				<p:column headerText="dateAchat" style="text-align: left; "
@@ -64,23 +71,19 @@
 					</h:outputText>
 
 				</p:column>
-
-				<p:column headerText="dateDePaiement" style="text-align: left; "
-					filterBy="#{t.dateDePaiement}">
-					<h:outputText value="#{t.dateDePaiement}">
-						<f:convertDateTime pattern="yyyy-MM-dd" />
-					</h:outputText>
+				<p:column headerText="quantite" style="text-align: left; "
+					filterBy="#{t.quantite}">
+					<h:outputText value="#{t.quantite}" />
 
 				</p:column>
 
+	
 				<p:column headerText="Montant" style="text-align: left; "
 					filterBy="#{t.montant_global}">
 					<h:outputText value="#{t.montant_global}">
 					</h:outputText>
 
 				</p:column>
-
-
 
 			</p:dataTable>
 		</p:panel>

@@ -21,7 +21,7 @@
 
 
 			<p:dataTable value="#{venteService.listVenteLait}" var="t" rows="10"
-				selectionMode="single" rowKey="#{t.ref_bon_vente}"
+				selectionMode="single" rowKey="#{t.id}"
 				selection="#{venteService.objectSelected}" rowIndexVar="rowIndex"
 				paginator="false"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

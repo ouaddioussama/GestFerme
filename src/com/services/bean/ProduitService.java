@@ -33,6 +33,14 @@ public class ProduitService extends ObjectService<Produit> implements Serializab
 
 	@Autowired
 	protected InterfProduitDao dao;
+	
+	 @Autowired
+	protected AchatService achatService;
+
+		
+	 @Autowired
+	protected VenteService venteService;
+
 
 	public ProduitService() {
 		System.out.println("construct ProduitService");
@@ -150,6 +158,8 @@ public class ProduitService extends ObjectService<Produit> implements Serializab
 		if (editedModele != null) {
 			dao.updateIstance(editedModele);
 			Help.msg = "mise a jour faite avec Succes";
+			achatService.init();
+			venteService.init();
 
 		} else {
 			System.out.println("objectToInsert is null !");

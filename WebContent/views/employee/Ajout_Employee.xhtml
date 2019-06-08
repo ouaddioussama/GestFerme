@@ -25,15 +25,13 @@
 				<h:outputLabel value="الإسم" styleClass="text_normal" />
 
 
-
 				<h:outputLabel value="Profil" styleClass="text_normal" />
-				<p:selectOneMenu filter="true" style="width:60%"
+				<p:selectOneMenu filter="true" style="width:60%" 
 					value="#{employeeService.objectToInsert.profil}">
-					<f:selectItems value="#{employeeService.listProfils}" var="cc"
+					<f:selectItems value="#{employeeService.listProfils}" var="cc" 
 						itemValue="#{cc}" itemLabel="#{cc}" />
 				</p:selectOneMenu>
 				<h:outputLabel value="وظيفة" styleClass="text_normal" />
-
 
 				<h:outputLabel value="email" styleClass="text_normal" />
 				<p:inputText style="width:80%"

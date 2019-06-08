@@ -67,8 +67,8 @@ public class LoginService {
 
 		if (EmployeetoLog != null) {
 			Employee emp = dao.findByName(EmployeetoLog.getNom());
-			if(emp!=null) {
-				System.out.println("logged employee :"+emp.getNom());
+			if (emp != null) {
+				System.out.println("logged employee :" + emp.getNom());
 			}
 
 			// System.out.println("nom:" + EmployeetoLog.getNom());
@@ -89,11 +89,17 @@ public class LoginService {
 						EmployeetoLog);
 
 				Help.msg = "Bienvenue Admin";
-				help.goRefresh("/views/acceuil-admin");
+				help.goRefresh("/views/acceuil");
 
 			} else {
 
 				if (ActiverSansNet()) {
+					if(!controleDateSsystem ()) {
+
+						Help.error_msg = "Contactez l'administrateur , pour activer le logiciel !";
+						Help.error();
+						return ;
+					}
 					if (emp != null && (EmployeetoLog.getNom().equals(emp.getNom()))
 							&& (EmployeetoLog.getPass_word().equals(emp.getPass_word()))) {
 						this.Logged = true;
@@ -107,16 +113,13 @@ public class LoginService {
 						help.goRefresh("/views/acceuil");
 						this.Logged = true;
 
-					} else if (EmployeetoLog != null && (EmployeetoLog.getNom().equals("admin"))
+					} else if ( EmployeetoLog != null && (EmployeetoLog.getNom().equals("admin"))
 							&& (EmployeetoLog.getPass_word().equals("admin"))) {
 						this.Logged = true;
 
 						EmployeetoLog = new Employee();
 						EmployeetoLog.setNom("Admin");
 						EmployeetoLog.setProfil(Profil.Admin);
-
-
-						
 
 						FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedEmployee",
 								EmployeetoLog);
@@ -136,11 +139,11 @@ public class LoginService {
 
 					System.out.println("inside bloc ActiverSansNet");
 					/*
-					System.out.println("log:"+EmployeetoLog.getNom());
-					System.out.println("log:"+EmployeetoLog.getPass_word());
-					System.out.println("emp:"+emp.getNom());
-					System.out.println("emp:"+emp.getPass_word());
-				   */	
+					 * System.out.println("log:"+EmployeetoLog.getNom());
+					 * System.out.println("log:"+EmployeetoLog.getPass_word());
+					 * System.out.println("emp:"+emp.getNom());
+					 * System.out.println("emp:"+emp.getPass_word());
+					 */
 
 					if (PublicServerTime.getNTPDate() == null) {
 						Help.error_msg = "veuillez contacter l'administrateur !";
@@ -149,7 +152,7 @@ public class LoginService {
 
 					}
 
-					else if (!licenceDateActive()) {
+					else if (!licenceDateActive() && !licenceMacActive()) {
 						// System.out.println(licenceDateActive());
 						System.out.println(securityService.getListObjects().get(0).getDate_fin());
 						// System.out.println(PublicServerTime.getNTPDate());
@@ -159,15 +162,14 @@ public class LoginService {
 						Help.error();
 
 					}
-
-					else if (!licenceMacActive()) {
-						// System.out.println(licenceMacActive());
-
-						Help.error_msg = "veuillez contacter l'administrateur !";
-						Help.error_msg2 = "pour activation sur ce pc !";
-						Help.error();
-
-					}
+					/*
+					 * else if (!licenceMacActive()) { // System.out.println(licenceMacActive());
+					 * 
+					 * Help.error_msg = "veuillez contacter l'administrateur !"; Help.error_msg2 =
+					 * "pour activation sur ce pc !"; Help.error();
+					 * 
+					 * }
+					 */
 
 					else if (emp != null && (EmployeetoLog.getNom().equals(emp.getNom()))
 							&& (EmployeetoLog.getPass_word().equals(emp.getPass_word()))) {
@@ -186,12 +188,9 @@ public class LoginService {
 							&& (EmployeetoLog.getPass_word().equals("admin"))) {
 						this.Logged = true;
 
-
 						EmployeetoLog = new Employee();
 						EmployeetoLog.setNom("Admin");
 						EmployeetoLog.setProfil(Profil.Admin);
-
-
 
 						FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedEmployee",
 								EmployeetoLog);
@@ -274,10 +273,42 @@ public class LoginService {
 	}
 
 	public boolean ActiverSansNet() {
+		Date dateFin = securityService.getListObjects().get(0).getDate_fin();
+
+		Calendar calServer = Calendar.getInstance();
+		Calendar calDateFin = Calendar.getInstance();
+
+		calServer.setTime(new Date());
+		calDateFin.setTime(dateFin);
+
+		System.out.println("s:" + calServer);
+		System.out.println("c;" + calDateFin);
 
 		if (securityService.getListObjects() != null && securityService.getListObjects().size() > 0) {
 			for (Security s : securityService.getListObjects()) {
 				if (s.getActive().trim().equals("sans-internet")) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+
+	}
+	
+	public boolean controleDateSsystem() {
+		Date dateFin = securityService.getListObjects().get(0).getDate_fin();
+
+		Calendar calServer = Calendar.getInstance();
+		Calendar calDateFin = Calendar.getInstance();
+
+		calServer.setTime(new Date());
+		calDateFin.setTime(dateFin);
+
+		if (securityService.getListObjects() != null && securityService.getListObjects().size() > 0) {
+			for (Security s : securityService.getListObjects()) {
+				if (  s.getMac_adresse().equals(securityService.CalcMacAdresse()) 
+						&& calDateFin.after(calServer)) {
 					return true;
 				}
 			}

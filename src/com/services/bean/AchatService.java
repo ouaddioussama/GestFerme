@@ -1,11 +1,14 @@
 package com.services.bean;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +19,12 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.export.Exporter;
 import org.primefaces.component.export.PDFOptions;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
@@ -35,6 +43,7 @@ import com.dao.interfaces.InterfProduitDao;
 import com.entities.Achat;
 import com.entities.Historique_Prod;
 import com.entities.Produit;
+import com.entities.Vente;
 //import com.itextpdf.text.Font;
 //import com.itextpdf.text.Document;
 //import com.itextpdf.text.DocumentException;
@@ -44,9 +53,21 @@ import com.entities.Produit;
 //import com.itextpdf.text.pdf.ColumnText;
 //import com.itextpdf.text.pdf.PdfWriter;
 import com.lowagie.text.BadElementException;
+import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
 //import com.lowagie.text.Paragraph;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.ColumnText;
+import com.lowagie.text.pdf.PdfDocument;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 
 @ManagedBean(name = "achatService")
 @ViewScoped
@@ -62,8 +83,15 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 	protected Achat objectToInsert;
 
 	private List<Achat> achatListDate = null;
+	private ArrayList<Achat> filtredAchatAgricole = new ArrayList<Achat>();
+	private ArrayList<Achat> filtredAchatAnimaux = new ArrayList<Achat>();;
+	private ArrayList<Achat> filtredAchatAuto = new ArrayList<Achat>();;
+	private ArrayList<Achat> filtredAchatAutre = new ArrayList<Achat>();;
 
 	private PDFOptions pdfOpt;
+
+	private String[] headers = { "Numero \n الرقم ", "ref_Bon \n مرجع الشراء", "Produit \n المنتوج",
+			"Fournisseur \n المزود", "DateAchat \n تاريخ الشراء ", "quantite  \n  كمية ", "Montant \n  المبلغ" };
 
 	// private List<Achat> filtered;
 
@@ -74,6 +102,9 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 	protected InterfProduitDao prodDao;
 	@Autowired
 	protected LoginService loginService;
+
+	@Autowired
+	protected SocieteService societeService;
 
 	private Set<String> listUnite = new HashSet<String>();
 	private Set<String> listReglement = new HashSet<String>();
@@ -139,6 +170,38 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 
 	public void setHide(boolean hide) {
 		this.hide = hide;
+	}
+
+	public List<Achat> getFiltredAchatAgricole() {
+		return filtredAchatAgricole;
+	}
+
+	public void setFiltredAchatAgricole(ArrayList<Achat> filtredAchatAgricole) {
+		this.filtredAchatAgricole = filtredAchatAgricole;
+	}
+
+	public List<Achat> getFiltredAchatAnimaux() {
+		return filtredAchatAnimaux;
+	}
+
+	public void setFiltredAchatAnimaux(ArrayList<Achat> filtredAchatAnimaux) {
+		this.filtredAchatAnimaux = filtredAchatAnimaux;
+	}
+
+	public List<Achat> getFiltredAchatAuto() {
+		return filtredAchatAuto;
+	}
+
+	public void setFiltredAchatAuto(ArrayList<Achat> filtredAchatAuto) {
+		this.filtredAchatAuto = filtredAchatAuto;
+	}
+
+	public List<Achat> getFiltredAchatAutre() {
+		return filtredAchatAutre;
+	}
+
+	public void setFiltredAchatAutre(ArrayList<Achat> filtredAchatAutre) {
+		this.filtredAchatAutre = filtredAchatAutre;
 	}
 
 	public void changeHide() {
@@ -208,6 +271,7 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 
 			try {
 				listObjects.add(objectToInsert);
+				updatefilterswhenAdd();
 
 			} catch (Exception e) {
 				listObjects = (List<Achat>) dao.findAll();
@@ -228,6 +292,7 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 		initLazyModel();
 
 		listObjects = (List<Achat>) dao.findAll();
+		// listObjects_filtered= (List<Achat>) dao.findAll();
 		System.out.println(listObjects.size());
 
 		for (Unite u : Unite.values()) {
@@ -236,6 +301,31 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 
 		for (Types_Reglement t : Types_Reglement.values()) {
 			listReglement.add(t.toString());
+		}
+		initFilters();
+	}
+
+	public void initFilters() {
+		filtredAchatAgricole = (ArrayList<Achat>) getListAchat(Categorie.Agricole_Achat);
+		filtredAchatAnimaux = (ArrayList<Achat>) getListAchat(Categorie.Animeaux_Achat);
+		filtredAchatAuto = (ArrayList<Achat>) getListAchat(Categorie.Auto_Achat);
+		filtredAchatAutre = (ArrayList<Achat>) getListAchat(Categorie.Autre_Achat);
+
+	}
+
+	public void updatefilterswhenAdd() {
+		if (objectToInsert != null && objectToInsert.getProduit() != null) {
+
+			Categorie cat = objectToInsert.getProduit().getCategorie();
+			if (cat == Categorie.Agricole_Achat)
+				filtredAchatAgricole.add(objectToInsert);
+			else if (cat == Categorie.Animeaux_Achat)
+				filtredAchatAnimaux.add(objectToInsert);
+			else if (cat == Categorie.Autre_Achat)
+				filtredAchatAutre.add(objectToInsert);
+			else if (cat == Categorie.Auto_Achat)
+				filtredAchatAuto.add(objectToInsert);
+
 		}
 
 	}
@@ -256,6 +346,7 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 
 		if (editedModele != null) {
 			dao.updateIstance(editedModele);
+			updateLists(editedModele);
 			Help.msg = "mise a jour faite avec Succes";
 
 		} else {
@@ -269,6 +360,7 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 		if (c != null) {
 			dao.deleteInstance(c);
 			listObjects.remove(c);
+			listObjects_filtered.remove(c);
 			Help.msg = "supprime avec Succes";
 
 		} else {
@@ -349,17 +441,17 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 	public List<Achat> getListAchatAgricole() {
 		title = "List des Achats des materiels agricols";
 		Arabictitle = "قائمة المشتريات الخاصة بالمواد الفلاحية";
-
-		// return getListAchat(Categorie.Agricole_Achat);
-		return dao.listAchat(Categorie.Agricole_Achat);
+		return getListAchat(Categorie.Agricole_Achat);
+		// return dao.listAchat(Categorie.Agricole_Achat);
 
 	}
 
 	public List<Achat> getListAnimeaux() {
 		title = "List des Achats des Animaux";
 		Arabictitle = "قائمة المشتريات الخاصة بالمواشي";
-		// return getListAchat(Categorie.Animeaux_Achat);
-		return dao.listAchat(Categorie.Animeaux_Achat);
+
+		return getListAchat(Categorie.Animeaux_Achat);
+		// return dao.listAchat(Categorie.Animeaux_Achat);
 
 	}
 
@@ -554,24 +646,23 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 				// TODO Auto-generated method stub
 				setRowCount(dao.listAchat(cat).size());
 				System.out.println("siiize:" + dao.listAchat(cat).size());
-				List<Achat> lines = dao.LazyList(first, pageSize, sortField, SortOrder.ASCENDING.equals(sortOrder),filters,
-						cat);
+				List<Achat> lines = dao.LazyList(first, pageSize, sortField, SortOrder.ASCENDING.equals(sortOrder),
+						filters, cat);
 
-//				lines.forEach(p -> System.out.println(p.getId()));
-//				List<Achat> filtredData = new ArrayList<Achat>();
-                  /*
-				for (Achat a : lines) {
-					for (Map.Entry<String, Object> entry : filters.entrySet()) {
-						String v = (String) entry.getValue();
-						System.out.println("++++++++++v:" + v);// valeur entré
-						System.out.println("----------v:" + entry.getKey()); // column name of filter
-
-
-						 // if(String.valueOf(c.getCode_edi()).contains(v)) { result.add(c); }
-						 
-
-					}
-				} */
+				// lines.forEach(p -> System.out.println(p.getId()));
+				// List<Achat> filtredData = new ArrayList<Achat>();
+				/*
+				 * for (Achat a : lines) { for (Map.Entry<String, Object> entry :
+				 * filters.entrySet()) { String v = (String) entry.getValue();
+				 * System.out.println("++++++++++v:" + v);// valeur entré
+				 * System.out.println("----------v:" + entry.getKey()); // column name of filter
+				 * 
+				 * 
+				 * // if(String.valueOf(c.getCode_edi()).contains(v)) { result.add(c); }
+				 * 
+				 * 
+				 * } }
+				 */
 
 				return lines;
 			}
@@ -596,6 +687,300 @@ public class AchatService extends ObjectService<Achat> implements Serializable, 
 			}
 
 		};
+
+	}
+
+	public void exportPDF(DataTable table, String filename) throws IOException {
+		FacesContext context = FacesContext.getCurrentInstance();
+		Exporter exporter = new CustomPDFExporter();
+		exporter.export(context, table, filename, false, false, "iso-8859-1", null, null, pdfOpt);
+		context.responseComplete();
+	}
+
+	public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException,
+			com.itextpdf.text.DocumentException, ParseException {
+		Document pdf = (Document) document;
+		// createPdf(pdf);
+		/*
+		 * pdf.open();
+		 * 
+		 * FacesContext fc = FacesContext.getCurrentInstance(); ExternalContext ec =
+		 * fc.getExternalContext();
+		 * 
+		 * // HttpServletResponse response = (HttpServletResponse) //
+		 * FacesContext.getCurrentInstance().getExternalContext() // .getResponse(); /*
+		 * ec.setResponseContentType(contentType); // Check
+		 * http://www.iana.org/assignments/media-types for all types. Use if necessary
+		 * ExternalContext#getMimeType() for auto-detection based on filename.
+		 * ec.setResponseContentLength(contentLength); // Set it with the file size.
+		 * This header is optional. It will work if it's omitted, but the download
+		 * progress will be unknown.
+		 * 
+		 * ec.setResponseContentType("application/pdf");
+		 * ec.setResponseHeader("Content-disposition", "inline=filename=file.pdf");
+		 * 
+		 * 
+		 * OutputStream out = ec.getResponseOutputStream(); createPdfTitles(pdf, out);
+		 * 
+		 * pdf.setPageSize(PageSize.A4);
+		 * 
+		 * ExternalContext externalContext =
+		 * FacesContext.getCurrentInstance().getExternalContext(); String logo =
+		 * externalContext.getRealPath("") + "/resources/images/logo.jpg"; Image img =
+		 * Image.getInstance(logo); pdf.add(img); pdf.add(Chunk.NEWLINE);
+		 * 
+		 * pdf.add(Chunk.NEWLINE); pdf.add(Chunk.NEWLINE); pdf.add(Chunk.NEWLINE);
+		 * pdf.add(Chunk.NEWLINE); pdf.add(Chunk.NEWLINE);
+		 */
+
+	}
+
+	public void createPdfTitles(Document document, OutputStream out)
+			throws DocumentException, IOException, com.itextpdf.text.DocumentException, ParseException {
+
+		// Document document = new Document();
+
+		PdfWriter writer = PdfWriter.getInstance(document, out);
+		// PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new
+		// File("result7.pdf")));
+		document.open();
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+		String path = servletContext.getRealPath("");
+		String allPath = path + "/resources/font/arialuni.ttf";
+
+		BaseFont bf = BaseFont.createFont(allPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+		Font font = new Font(bf, 14);
+		ColumnText column = new ColumnText(writer.getDirectContent());
+		column.setSimpleColumn(236, 690, 669, 56);
+		column.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+
+		column.addElement(new Paragraph(this.title, font));
+		Paragraph pp = new Paragraph(this.Arabictitle, font);
+		column.addElement(pp);
+		column.addElement(Chunk.NEWLINE);
+		column.addElement(Chunk.NEWLINE);
+		column.go();
+		// document.add(Chunk.NEWLINE);
+
+		// document.close();
+		System.out.println("done!");
+
+	}
+
+	public void changeTitles(String titleFr, String titleAr) {
+		this.title = titleFr;
+		this.Arabictitle = titleAr;
+
+	}
+
+	public void createPdf(String type)
+			throws DocumentException, IOException, com.itextpdf.text.DocumentException, ParseException {
+		switch (type) {
+		case "Ag":
+			generatePdf(filtredAchatAgricole);
+		case "An":
+			generatePdf(filtredAchatAnimaux);
+		case "Auto":
+			generatePdf(filtredAchatAuto);
+		case "Autre":
+			generatePdf(filtredAchatAutre);
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	public void generatePdf(List<Achat> filtredAchat) throws DocumentException, IOException, ParseException {
+
+		FacesContext fc = FacesContext.getCurrentInstance();
+		ExternalContext ec = fc.getExternalContext();
+		ec.setResponseContentType("application/pdf");
+		ec.setResponseHeader("Content-disposition", "inline=filename=file.pdf");
+
+		System.out.println("heeeeeeeeeeere:" + filtredAchatAgricole.size());
+
+		// PdfDocument pdfDoc = new PdfDocument(new
+		// PdfWriter(ec.getResponseOutputStream()));
+		// Document doc = new Document(pdfDoc);
+
+		/*
+		 * OutputStream out = null; try { out = ec.getResponseOutputStream();
+		 * 
+		 * } catch (Exception e) { // TODO: handle exception }
+		 */
+		Document document = new Document();
+		PdfWriter writer = PdfWriter.getInstance(document, ec.getResponseOutputStream());
+
+		// PdfWriter writer = PdfWriter.getInstance(document, out);
+		// PdfWriter writer = PdfWriter.getInstance(document, out);
+		document.open();
+		/** Ajout de l image **/
+		String logo = ec.getRealPath("") + "/resources/images/logo.jpg";
+		Image img = Image.getInstance(logo);
+		document.add(img);
+		document.add(Chunk.NEWLINE);
+		/** Ajout des titres **/
+
+		PdfPTable pdfTableH = new PdfPTable(1);
+		pdfTableH.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+		pdfTableH.setHorizontalAlignment(Element.ALIGN_CENTER);
+		pdfTableH.setWidthPercentage(100);
+		pdfTableH.getDefaultCell().setBorder(0);
+
+		String path = ec.getRealPath("");
+		String allPath = path + "/resources/font/arialuni.ttf";
+
+		BaseFont bf = BaseFont.createFont(allPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+		Font font = new Font(bf, 14);
+
+		PdfPCell celltitre = new PdfPCell(new Paragraph(this.title, font));
+		celltitre.setHorizontalAlignment(Element.ALIGN_CENTER);
+		celltitre.setBorder(0);
+		pdfTableH.addCell(celltitre);
+
+		PdfPCell celltitreAr = new PdfPCell(new Paragraph(this.Arabictitle, font));
+		celltitreAr.setHorizontalAlignment(Element.ALIGN_CENTER);
+		celltitreAr.setBorder(0);
+		pdfTableH.addCell(celltitreAr);
+
+		PdfPCell emptyCell = new PdfPCell(new Paragraph("\n", font));
+		emptyCell.setBorder(0);
+		pdfTableH.addCell(emptyCell);
+
+		document.add(pdfTableH);
+		document.add(Chunk.NEWLINE);
+
+		/*
+		 * ColumnText column = new ColumnText(writer.getDirectContent());
+		 * column.setSimpleColumn(200, 690, 669, 106);
+		 * column.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+		 * 
+		 * column.addElement(new Paragraph(this.title, font)); Paragraph pp = new
+		 * Paragraph(this.Arabictitle, font); column.addElement(pp);
+		 * column.addElement(Chunk.NEWLINE); column.addElement(Chunk.NEWLINE);
+		 * 
+		 * ColumnText column2 = new ColumnText(writer.getDirectContent());
+		 * column2.setSimpleColumn(35, 640, 630, 440);
+		 * 
+		 * PdfPTable pdfTable = new PdfPTable(headers.length);
+		 * pdfTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+		 * pdfTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+		 * pdfTable.setWidthPercentage(100);
+		 * 
+		 */
+
+		/** Ajout du headers **/
+
+		// PdfPTable pdfTable = new PdfPTable(headers.length);
+		PdfPTable pdfTable = new PdfPTable(new float[] { 15, 15, 20, 20, 20, 15, 15 });
+		pdfTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+		pdfTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+		pdfTable.setWidthPercentage(100);
+
+		for (String h : headers) {
+			PdfPCell cell1 = new PdfPCell(new Paragraph(h, font));
+			cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell1);
+
+		}
+
+		int index = 1;
+		double total = 0;
+		/** Add Body **/
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		for (Achat a : filtredAchat) {
+
+			PdfPCell cell1 = new PdfPCell(new Paragraph(String.valueOf(index), font));
+			cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			// cell1.setPaddingLeft(0);
+			pdfTable.addCell(cell1);
+
+			PdfPCell cell12 = new PdfPCell(
+					new Paragraph(a.getRef_bon_achat() != null ? String.valueOf(a.getRef_bon_achat()) : "", font));
+			cell12.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell12);
+
+			PdfPCell cell2 = new PdfPCell(
+					new Paragraph(a.getProduit() != null ? a.getProduit().getDesignation_prod() : "", font));
+			cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell2);
+			PdfPCell cell3 = new PdfPCell(
+					new Paragraph(a.getFournisseur() != null ? a.getFournisseur().getNom() : "", font));
+			cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell3);
+
+			PdfPCell cell4 = new PdfPCell(
+					new Paragraph((a.getDateAchat() != null ? dateFormat.format(a.getDateAchat()) : ""), font));
+			cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell4);
+
+			PdfPCell cell5 = new PdfPCell(new Paragraph(String.valueOf(a.getQuantite()), font));
+			cell5.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell5);
+
+			PdfPCell cell6 = new PdfPCell(new Paragraph(String.valueOf(a.getMontant_global()), font));
+			cell6.setHorizontalAlignment(Element.ALIGN_CENTER);
+			pdfTable.addCell(cell6);
+
+			System.out.println("m!" + a.getMontant_global());
+			System.out.println("t!" + total);
+			// calcul total Montant
+			total += a.getMontant_global();
+			index++;
+		}
+		// column2.addElement(Chunk.NEWLINE);
+		document.add(pdfTable);
+		document.add(Chunk.NEWLINE);
+		document.add(new Paragraph("Montant Global " + String.format("%.2f", total) + " DH"));
+
+		// column2.addElement(Chunk.NEWLINE);
+
+		// column.go();
+		// column2.go();
+
+		document.close();
+		writer.close();
+		System.out.println("done!");
+
+	}
+
+	public void updateLists(Achat f) {
+		updateFileteredList(f);
+		updateObjectList(f);
+	}
+
+	public void updateFileteredList(Achat f) {
+
+		int index = 0;
+
+		for (Achat fou : listObjects_filtered) {
+			if (fou.getId() == f.getId()) {
+				break;
+			}
+			index++;
+		}
+
+		listObjects_filtered.set(index, f);
+
+	}
+
+	public void updateObjectList(Achat f) {
+
+		int index = 0;
+
+		for (Achat fou : listObjects) {
+			if (fou.getId() == f.getId()) {
+				break;
+			}
+			index++;
+		}
+
+		listObjects.set(index, f);
 
 	}
 

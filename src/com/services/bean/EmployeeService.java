@@ -120,7 +120,10 @@ public class EmployeeService extends ObjectService<Employee> implements Serializ
 		   
 		   
 		   for(Profil s:Profil.values()) {
-			   listProfils.add(s.toString());
+			   if(s!=Profil.AdminGlobal) {
+				    listProfils.add(s.toString());
+
+			   }
 			}
 		   System.out.println(listObjects.size());
 		   

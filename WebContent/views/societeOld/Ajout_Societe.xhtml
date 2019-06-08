@@ -10,35 +10,30 @@
 </h:head>
 <h:body styleClass="Body">
 
-	<h:form id="prod">
-
-		<p:panel header="Ajout Information Produit Agricole / إضافة معلومات  المواد الفلاحية " styleClass="text_normal"
-		id="prod"
+	<h:form>
+		<p:growl id="growl" life="1000" showDetail="true" />
+		
+		<p:panel header="Ajout Information societe " styleClass="text_normal"
 			style="width:100%">
-			<h:panelGrid columns="4" id="panelProd"
+			<h:panelGrid columns="4" id="panelmodel"
 				style="color:blue;width:100%" cellpadding="4">
 
 
-				<h:outputLabel value="libelle Produit" styleClass="text_normal" />
+				<h:outputLabel value="nom" styleClass="text_normal" />
 				<p:inputText style="width:80%"
-					value="#{produitService.objectToInsert.designation_prod}" />
-
-				<h:outputLabel value="إسم  المنتوج" styleClass="text_normal" />
+					value="#{societeService.objectToInsert.nom_Societe}" />
 
 
-
+			
 
 			</h:panelGrid>
 		</p:panel>
 		<br></br>
 
 		<p:commandButton value="ajouter" style="margin-left: 45%;width:10%"
-			actionListener="#{produitService.createProdAgricoleAchat}" 
-			update="growl1 frmContent:index:listOperation
-			frmContent:index:listProd
-			  frmContent:index:addPanel  frmContent:index:listOperation
-			  frmContent:index:mdProd	 frmContent:index:prod:panelProd
-			 " />
+			actionListener="#{societeService.create}"
+			update="growl1 frmContent"
+			/>
 
 
 
